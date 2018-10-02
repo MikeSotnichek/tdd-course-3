@@ -20,6 +20,11 @@ TEST(IsLeapYear, NonLeapYear)
     EXPECT_EQ(IsLeapYear(1373), false);
 }
 
+TEST(IsLeapYear, NonLeapYear2)
+{
+    EXPECT_EQ(IsLeapYear(1800), false);
+}
+
 TEST(IsLeapYear, LeapYear)
 {
     EXPECT_EQ(IsLeapYear(1996), true);
