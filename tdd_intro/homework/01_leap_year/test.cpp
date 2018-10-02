@@ -15,22 +15,22 @@ If your language provides a method in the standard library that does this look-u
 #include <gtest/gtest.h>
 #include "LeapYear.h"
 
-TEST(IsLeapYear, NonLeapYear)
+TEST(IsLeapYear, NonLeapYearNotDivisibleBy4)
 {
     EXPECT_EQ(IsLeapYear(1373), false);
 }
 
-TEST(IsLeapYear, NonLeapYear2)
+TEST(IsLeapYear, NonLeapYearDivisibleBy100)
 {
     EXPECT_EQ(IsLeapYear(1800), false);
 }
 
-TEST(IsLeapYear, LeapYear)
+TEST(IsLeapYear, LeapYearDivisibleBy4)
 {
     EXPECT_EQ(IsLeapYear(1996), true);
 }
 
-TEST(IsLeapYear, LeapYear2)
+TEST(IsLeapYear, LeapYearDivisibleBy400)
 {
     EXPECT_EQ(IsLeapYear(2000), true);
 }
