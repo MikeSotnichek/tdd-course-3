@@ -6,4 +6,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
+    test.cpp \
+    LeapYear.cpp
+
+HEADERS += \
+    LeapYear.h

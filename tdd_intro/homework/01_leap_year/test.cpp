@@ -13,6 +13,7 @@ If your language provides a method in the standard library that does this look-u
 */
 
 #include <gtest/gtest.h>
+#include "LeapYear.h"
 
 TEST(IsLeapYear, NonLeapYear)
 {
