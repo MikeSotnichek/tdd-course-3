@@ -37,3 +37,8 @@ TEST(ConvertTrenaryDigit, SingleDigit2)
 {
     EXPECT_EQ(ConvertTrenaryDigit('2'), 2);
 }
+
+TEST(ConvertTrenaryDigit, NotADigit)
+{
+    EXPECT_EQ(ConvertTrenaryDigit('a'), 0);
+}
