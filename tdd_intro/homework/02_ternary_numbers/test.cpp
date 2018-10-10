@@ -33,6 +33,11 @@ TEST(ConvertTrenary, ConvertNotANumber)
     EXPECT_EQ(ConvertTrenary("1asdf210"), 0);
 }
 
+TEST(ConvertTrenary, ConvertNotANumber2)
+{
+    EXPECT_EQ(ConvertTrenary("notANumber!!1"), 0);
+}
+
 TEST(ConvertTrenaryDigit, SingleDigit0)
 {
     EXPECT_EQ(ConvertTrenaryDigit('0'), 0);
