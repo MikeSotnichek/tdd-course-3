@@ -1,5 +1,10 @@
 #include "TrenaryConverter.h"
 
+bool IsNotTrenaryDigit(const char character)
+{
+    return character != '0' && character != '1' && character != '2';
+}
+
 unsigned int ConvertTrenaryDigit(const char trenaryDigit)
 {
     switch (trenaryDigit)
@@ -17,18 +22,15 @@ unsigned int ConvertTrenaryDigit(const char trenaryDigit)
 
 unsigned int ConvertTrenary(const std::string& trenary)
 {
-    for (const auto ch : trenary)
-    {
-        if (ch != '0' && ch != '1' && ch != '2')
-        {
-            return 0;
-        }
-    }
-
     unsigned int pw = 1;
     unsigned int number = 0;
     for (auto it = trenary.rbegin(); it != trenary.rend(); ++it)
     {
+        if (IsNotTrenaryDigit(*it))
+        {
+            return 0;
+        }
+
         number += pw * ConvertTrenaryDigit(*it);
         pw *= 3;
     }
