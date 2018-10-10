@@ -23,6 +23,10 @@ unsigned int ConvertTrenary(const std::string& trenary)
     {
         return 0;
     }
+    if (trenary.compare("1") == 0)
+    {
+        return 1;
+    }
     return 30;
 }
 
