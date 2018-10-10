@@ -23,6 +23,11 @@ TEST(ConvertTrenary, ConvertANumber)
     EXPECT_EQ(ConvertTrenary("1010"), 30);
 }
 
+TEST(ConvertTrenary, ConvertANumber2)
+{
+    EXPECT_EQ(ConvertTrenary("1210"), 48);
+}
+
 TEST(ConvertTrenaryDigit, SingleDigit0)
 {
     EXPECT_EQ(ConvertTrenaryDigit('0'), 0);
