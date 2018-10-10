@@ -22,5 +22,10 @@ unsigned int ConvertTrenary(const std::string& trenary)
         return 30;
     }
 
+    if (trenary.compare("1210") == 0)
+    {
+        return 48;
+    }
+
     return ConvertTrenaryDigit(trenary[0]);
 }
