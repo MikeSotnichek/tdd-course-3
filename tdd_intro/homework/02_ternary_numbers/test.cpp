@@ -17,7 +17,7 @@ The last place in a ternary number is the 1's place. The second to last is the 3
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
 
-unsigned int ConvertTrenary(const std::string& trenary)
+unsigned int ConvertTrenary(const std::string& /*trenary*/)
 {
     return 30;
 }
