@@ -28,6 +28,11 @@ TEST(ConvertTrenary, ConvertANumber2)
     EXPECT_EQ(ConvertTrenary("1210"), 48);
 }
 
+TEST(ConvertTrenary, ConvertNotANumber)
+{
+    EXPECT_EQ(ConvertTrenary("1asdf210"), 0);
+}
+
 TEST(ConvertTrenaryDigit, SingleDigit0)
 {
     EXPECT_EQ(ConvertTrenaryDigit('0'), 0);
