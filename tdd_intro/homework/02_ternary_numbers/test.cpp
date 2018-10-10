@@ -35,3 +35,8 @@ TEST(ConvertTrenary, SingleDigit0)
 {
     EXPECT_EQ(ConvertTrenary("0"), 0);
 }
+
+TEST(ConvertTrenary, SingleDigit1)
+{
+    EXPECT_EQ(ConvertTrenary("1"), 1);
+}
