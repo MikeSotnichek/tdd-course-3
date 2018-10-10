@@ -17,15 +17,13 @@ unsigned int ConvertTrenaryDigit(const char trenaryDigit)
 
 unsigned int ConvertTrenary(const std::string& trenary)
 {
-    if (trenary.compare("1010") == 0)
+    unsigned int pw = 1;
+    unsigned int number = 0;
+    for (auto it = trenary.rbegin(); it != trenary.rend(); ++it)
     {
-        return 30;
+        number += pw * ConvertTrenaryDigit(*it);
+        pw *= 3;
     }
 
-    if (trenary.compare("1210") == 0)
-    {
-        return 48;
-    }
-
-    return ConvertTrenaryDigit(trenary[0]);
+    return number;
 }
