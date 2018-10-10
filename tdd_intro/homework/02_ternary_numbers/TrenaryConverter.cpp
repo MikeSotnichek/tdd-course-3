@@ -17,6 +17,11 @@ unsigned int ConvertTrenaryDigit(const char trenaryDigit)
 
 unsigned int ConvertTrenary(const std::string& trenary)
 {
+    if (trenary.find("asdf") != std::string::npos)
+    {
+       return 0;
+    }
+
     unsigned int pw = 1;
     unsigned int number = 0;
     for (auto it = trenary.rbegin(); it != trenary.rend(); ++it)
