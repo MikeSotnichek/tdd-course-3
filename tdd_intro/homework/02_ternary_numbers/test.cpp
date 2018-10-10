@@ -1,5 +1,3 @@
-#include <gtest/gtest.h>
-
 /*
 Convert a ternary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.
 
@@ -17,28 +15,8 @@ The last place in a ternary number is the 1's place. The second to last is the 3
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
 
-unsigned int ConvertTrenaryDigit(const char trenaryDigit)
-{
-    switch (trenaryDigit)
-    {
-        case '0':
-            return 0;
-        case '1':
-            return 1;
-        default:
-            return 0;
-    }
-}
-
-unsigned int ConvertTrenary(const std::string& trenary)
-{
-    if (trenary.compare("1010") == 0)
-    {
-        return 30;
-    }
-
-    return ConvertTrenaryDigit(trenary[0]);
-}
+#include <gtest/gtest.h>
+#include "TrenaryConverter.h"
 
 TEST(ConvertTrenary, ConvertANumber)
 {
