@@ -198,6 +198,8 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
 
 /*
  * Test list:
+ * A single digit 0 .. 9
+ *
  * All same digits 0
  * All same gigits 1
  * ...
@@ -224,4 +226,11 @@ TEST(OCRScanDisplay, EmptyDisplay)
 {
     const Display empty = {"", "", ""};
     EXPECT_EQ(OCRScanDisplay(empty), 0);
+}
+
+
+TEST(OCRScanDisplay, SingleDigit1)
+{
+    const Display one = { s_digit1.lines[0], s_digit1.lines[1], s_digit1.lines[2] };
+    EXPECT_EQ(OCRScanDisplay(one), 1);
 }
