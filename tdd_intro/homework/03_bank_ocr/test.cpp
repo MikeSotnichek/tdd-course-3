@@ -195,3 +195,22 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
                                      "  | _| _||_||_ |_   ||_||_|",
                                      "  ||_  _|  | _||_|  ||_| _|"
 };
+
+/*
+ * Test list:
+ * All same digits 0
+ * All same gigits 1
+ * ...
+ * All same digits 9
+ *
+ * Different digits:
+ * - Two kinds of digits
+ * - Several kinds of digits
+ *
+ * //Not in specification:
+ * Malformed input:
+ * - Empty
+ * - Not correct amount of lines
+ * - Not correct amount of columns
+ * - Not correct digits
+*/
