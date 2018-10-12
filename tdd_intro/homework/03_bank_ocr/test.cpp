@@ -210,7 +210,13 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
  * //Not in specification:
  * Malformed input:
  * - Empty
- * - Not correct amount of lines
- * - Not correct amount of columns
+ * - Not correct amount of lines (less, more)
+ * - Not correct amount of columns (less, more)
  * - Not correct digits
 */
+
+TEST(OCRScanDisplay, EmptyDisplay)
+{
+    const Display empty = {"", "", ""};
+    EXPECT_EQ(OCRScanDisplay(empty), 0);
+}
