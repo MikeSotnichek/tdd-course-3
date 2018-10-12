@@ -215,6 +215,11 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
  * - Not correct digits
 */
 
+unsigned int OCRScanDisplay(const Display& display)
+{
+    return 0;
+}
+
 TEST(OCRScanDisplay, EmptyDisplay)
 {
     const Display empty = {"", "", ""};
