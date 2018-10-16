@@ -94,6 +94,9 @@ Example input and output
  * Test list:
  * A single digit 0 .. 9
  *
+ * Two digits 10
+ * Two digits 01
+ *
  * All same digits 0
  * All same gigits 1
  * ...
@@ -168,3 +171,10 @@ TEST(OCRScanDisplay, SingleDigit5)
     EXPECT_EQ(OCRScanDisplay(five), 5);
 }
 
+TEST(OCRScanDisplay, TwoDigits10)
+{
+    const Display ten = { s_digit1.lines[0] + s_digit0.lines[0],
+                          s_digit1.lines[1] + s_digit0.lines[1],
+                          s_digit1.lines[2] + s_digit0.lines[2] };
+    EXPECT_EQ(OCRScanDisplay(ten), 10);
+}
