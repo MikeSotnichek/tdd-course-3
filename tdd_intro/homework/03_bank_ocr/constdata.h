@@ -1,5 +1,6 @@
 #pragma once
 #include "display.h"
+#include <vector>
 
 const Digit s_digit0 = { " _ ",
                          "| |",
@@ -41,6 +42,19 @@ const Digit s_digit9 = { " _ ",
                          "|_|",
                          " _|"
                        };
+
+const std::vector<Digit> s_digitsDict = {
+    s_digit0,
+    s_digit1,
+    s_digit2,
+    s_digit3,
+    s_digit4,
+    s_digit5,
+    s_digit6,
+    s_digit7,
+    s_digit8,
+    s_digit9
+};
 
 const Display s_displayAll0 = { " _  _  _  _  _  _  _  _  _ ",
                                 "| || || || || || || || || |",
