@@ -86,6 +86,8 @@ Example input and output
 */
 #include <gtest/gtest.h>
 #include <string>
+#include <vector>
+#include <exception>
 #include "constdata.h"
 #include "display.h"
 
@@ -117,18 +119,43 @@ bool operator ==(const Digit& left, const Digit& right)
             && left.lines[2] == right.lines[2];
 }
 
+const std::vector<Digit> s_digitsDict = {
+    s_digit0,
+    s_digit1,
+    s_digit2,
+    s_digit3,
+    s_digit4,
+    s_digit5,
+    s_digit6,
+    s_digit7,
+    s_digit8,
+    s_digit9
+};
+
+unsigned int lookupDigit(const Digit& digit)
+{
+    const auto foundDigit = std::find(s_digitsDict.begin(), s_digitsDict.end(), digit);
+    if (foundDigit == s_digitsDict.end())
+    {
+        throw std::exception("Invalid digit.");
+    }
+    unsigned int value = std::distance(s_digitsDict.begin(), foundDigit);
+    return value;
+}
+
 unsigned int OCRScanDisplay(const Display& display)
 {
-    Digit displayDigit = {display.lines[0], display.lines[1], display.lines[2]};
-    if (displayDigit == s_digit1)
+    const Digit displayDigit = {display.lines[0], display.lines[1], display.lines[2]};
+    unsigned int value = 0;
+    try
     {
-        return 1;
+        value = lookupDigit(displayDigit);
     }
-    if (displayDigit == s_digit2)
+    catch (const std::exception& /*ex*/)
     {
-        return 2;
+        //warning "invalid digit"
     }
-    return 0;
+    return value;
 }
 
 TEST(OCRScanDisplay, EmptyDisplay)
