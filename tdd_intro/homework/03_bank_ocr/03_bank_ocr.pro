@@ -7,3 +7,7 @@ CONFIG -= qt
 
 SOURCES += \
     test.cpp
+
+HEADERS += \
+    constdata.h \
+    display.h
