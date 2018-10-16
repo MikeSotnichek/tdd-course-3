@@ -161,3 +161,10 @@ TEST(OCRScanDisplay, SingleDigit2)
     const Display two = { s_digit2.lines[0], s_digit2.lines[1], s_digit2.lines[2] };
     EXPECT_EQ(OCRScanDisplay(two), 2);
 }
+
+TEST(OCRScanDisplay, SingleDigit5)
+{
+    const Display five = { s_digit5.lines[0], s_digit5.lines[1], s_digit5.lines[2] };
+    EXPECT_EQ(OCRScanDisplay(five), 5);
+}
+
