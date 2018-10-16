@@ -199,3 +199,11 @@ TEST(OCRScanDisplay, TwoDigits10)
                           s_digit1.lines[2] + s_digit0.lines[2] };
     EXPECT_EQ(OCRScanDisplay(ten), 10);
 }
+
+TEST(OCRScanDisplay, TwoDigits01)
+{
+    const Display one = { s_digit0.lines[0] + s_digit1.lines[0],
+                          s_digit0.lines[1] + s_digit1.lines[1],
+                          s_digit0.lines[2] + s_digit1.lines[2] };
+    EXPECT_EQ(OCRScanDisplay(one), 1);
+}
