@@ -174,3 +174,8 @@ TEST(OCRScanDisplay, AllSameDigits7)
 {
     EXPECT_EQ(OCRScanDisplay(s_displayAll7), 777777777);
 }
+
+TEST(OCRScanDisplay, Acceptance)
+{
+    EXPECT_EQ(OCRScanDisplay(s_display123456789), 123456789);
+}
