@@ -232,9 +232,14 @@ TEST(OCRScanDisplay, EmptyDisplay)
     EXPECT_EQ(OCRScanDisplay(empty), 0);
 }
 
-
 TEST(OCRScanDisplay, SingleDigit1)
 {
     const Display one = { s_digit1.lines[0], s_digit1.lines[1], s_digit1.lines[2] };
     EXPECT_EQ(OCRScanDisplay(one), 1);
+}
+
+TEST(OCRScanDisplay, SingleDigit2)
+{
+    const Display two = { s_digit2.lines[0], s_digit2.lines[1], s_digit2.lines[2] };
+    EXPECT_EQ(OCRScanDisplay(two), 2);
 }
