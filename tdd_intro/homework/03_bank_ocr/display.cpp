@@ -38,16 +38,15 @@ unsigned int OCRScanDisplay(const Display& display)
     unsigned int value = 0;
     try
     {
-        Digit displayDigit1;
-        OCRExtractDigitAtPos(display, 0, displayDigit1);
-        value = OCRLookupDigit(displayDigit1);
-
-        Digit displayDigit2;
-        OCRExtractDigitAtPos(display, 1, displayDigit2);
-        if (!(displayDigit2 == s_emptyDigit))
+        for (unsigned int pos = 0; pos < g_digitsOnDisplay; pos++)
         {
-            value *= 10;
-            value += OCRLookupDigit(displayDigit2);
+            Digit displayDigit;
+            OCRExtractDigitAtPos(display, pos, displayDigit);
+            if (!(displayDigit == s_emptyDigit))
+            {
+                value *= 10;
+                value += OCRLookupDigit(displayDigit);
+            }
         }
     }
     catch (const std::exception& /*ex*/)
