@@ -42,6 +42,7 @@ const Digit s_digit9 = { " _ ",
                          "|_|",
                          " _|"
                        };
+const Digit s_emptyDigit = { "", "", "" };
 
 const std::vector<Digit> s_digitsDict = {
     s_digit0,

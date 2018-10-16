@@ -116,12 +116,15 @@ Example input and output
 
 bool operator ==(const Digit& left, const Digit& right)
 {
-    return left.lines[0] == right.lines[0]
-            && left.lines[1] == right.lines[1]
-            && left.lines[2] == right.lines[2];
+    bool digitsEqual = true;
+    for (unsigned int i = 0; i < g_linesInDigit; i++)
+    {
+        digitsEqual &= left.lines[i] == right.lines[i];
+    }
+    return digitsEqual;
 }
 
-unsigned int lookupDigit(const Digit& digit)
+unsigned int OCRLookupDigit(const Digit& digit)
 {
     const auto foundDigit = std::find(s_digitsDict.begin(), s_digitsDict.end(), digit);
     if (foundDigit == s_digitsDict.end())
@@ -132,23 +135,30 @@ unsigned int lookupDigit(const Digit& digit)
     return value;
 }
 
+// Positions on display start from 0, from left to right
+void OCRExtractDigitAtPos(const Display& display, unsigned int pos, Digit& target)
+{
+    for (unsigned int i = 0; i < g_linesInDigit; i++)
+    {
+        target.lines[i] = display.lines[i].substr(g_digitLen * pos, g_digitLen);
+    }
+}
+
 unsigned int OCRScanDisplay(const Display& display)
 {
     unsigned int value = 0;
     try
     {
-        const Digit displayDigit1 = {display.lines[0].substr(0, g_digitLen),
-                                     display.lines[1].substr(0, g_digitLen),
-                                     display.lines[2].substr(0, g_digitLen)};
-        value = lookupDigit(displayDigit1);
+        Digit displayDigit1;
+        OCRExtractDigitAtPos(display, 0, displayDigit1);
+        value = OCRLookupDigit(displayDigit1);
 
-        const Digit displayDigit2 = {display.lines[0].substr(g_digitLen, g_digitLen),
-                                     display.lines[1].substr(g_digitLen, g_digitLen),
-                                     display.lines[2].substr(g_digitLen, g_digitLen)};
-        if (!(displayDigit2 == Digit{"","",""}))
+        Digit displayDigit2;
+        OCRExtractDigitAtPos(display, 1, displayDigit2);
+        if (!(displayDigit2 == s_emptyDigit))
         {
             value *= 10;
-            value += lookupDigit(displayDigit2);
+            value += OCRLookupDigit(displayDigit2);
         }
     }
     catch (const std::exception& /*ex*/)
