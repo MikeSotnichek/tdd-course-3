@@ -13,3 +13,5 @@ struct Display
 {
     std::string lines[g_linesInDigit];
 };
+
+unsigned int OCRScanDisplay(const Display& display);

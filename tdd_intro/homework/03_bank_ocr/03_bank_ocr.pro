@@ -6,7 +6,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
+    test.cpp \
+    display.cpp
 
 HEADERS += \
     constdata.h \
