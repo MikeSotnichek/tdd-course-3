@@ -134,11 +134,22 @@ unsigned int lookupDigit(const Digit& digit)
 
 unsigned int OCRScanDisplay(const Display& display)
 {
-    const Digit displayDigit = {display.lines[0], display.lines[1], display.lines[2]};
     unsigned int value = 0;
     try
     {
-        value = lookupDigit(displayDigit);
+        const Digit displayDigit1 = {display.lines[0].substr(0, g_digitLen),
+                                     display.lines[1].substr(0, g_digitLen),
+                                     display.lines[2].substr(0, g_digitLen)};
+        value = lookupDigit(displayDigit1);
+
+        const Digit displayDigit2 = {display.lines[0].substr(g_digitLen, g_digitLen),
+                                     display.lines[1].substr(g_digitLen, g_digitLen),
+                                     display.lines[2].substr(g_digitLen, g_digitLen)};
+        if (!(displayDigit2 == Digit{"","",""}))
+        {
+            value *= 10;
+            value += lookupDigit(displayDigit2);
+        }
     }
     catch (const std::exception& /*ex*/)
     {
