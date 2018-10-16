@@ -223,6 +223,10 @@ unsigned int OCRScanDisplay(const Display& display)
     {
         return 1;
     }
+    if(display.lines[0] == s_digit2.lines[0] && display.lines[1] == s_digit2.lines[1] && display.lines[2] == s_digit2.lines[2])
+    {
+        return 2;
+    }
     return 0;
 }
 
