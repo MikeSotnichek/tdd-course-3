@@ -164,3 +164,8 @@ TEST(OCRScanDisplay, TwoDigits01)
     PopulateDisplay(one, {s_digit0, s_digit1});
     EXPECT_EQ(OCRScanDisplay(one), 1);
 }
+
+TEST(OCRScanDisplay, AllSameDigits4)
+{
+    EXPECT_EQ(OCRScanDisplay(s_displayAll4), 444444444);
+}
