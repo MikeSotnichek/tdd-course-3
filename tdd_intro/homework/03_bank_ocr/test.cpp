@@ -110,13 +110,21 @@ Example input and output
  * - Not correct digits
 */
 
+bool operator ==(const Digit& left, const Digit& right)
+{
+    return left.lines[0] == right.lines[0]
+            && left.lines[1] == right.lines[1]
+            && left.lines[2] == right.lines[2];
+}
+
 unsigned int OCRScanDisplay(const Display& display)
 {
-    if(display.lines[0] == s_digit1.lines[0] && display.lines[1] == s_digit1.lines[1] && display.lines[2] == s_digit1.lines[2])
+    Digit displayDigit = {display.lines[0], display.lines[1], display.lines[2]};
+    if (displayDigit == s_digit1)
     {
         return 1;
     }
-    if(display.lines[0] == s_digit2.lines[0] && display.lines[1] == s_digit2.lines[1] && display.lines[2] == s_digit2.lines[2])
+    if (displayDigit == s_digit2)
     {
         return 2;
     }
