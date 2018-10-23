@@ -161,3 +161,10 @@ TEST(WeatherClient, ParseWeatherTemperature2)
     details::ParseWeatherString("35", weather);
     EXPECT_EQ(35, weather.temperature);
 }
+
+TEST(WeatherClient, ParseWeatherWindDirection)
+{
+    Weather weather;
+    details::ParseWeatherString("35;100", weather);
+    EXPECT_EQ(100, weather.windDirection);
+}
