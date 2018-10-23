@@ -82,6 +82,10 @@ public:
 
 /* Test list:
  * helper functions
+ * 0. Parse weather responce
+ * 0.1. Parse temp
+ * 0.2. Parse wind direction
+ * 0.3. Parse wind speed
  * 1. get data for single date-time
  * 2. get day hours (3, 9, 15, 21)
  * 3. collect day data
@@ -135,3 +139,10 @@ private:
         {"02.09.2018;21:00", "27;299;4.0"}
     };
 };
+
+TEST(WeatherClient, ParseWeatherTemperature)
+{
+    Weather weather;
+    details::ParseWeatherString("20", weather);
+    EXPECT_EQ(20, weather.temperature);
+}
