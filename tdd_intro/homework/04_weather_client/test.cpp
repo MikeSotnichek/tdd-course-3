@@ -144,7 +144,25 @@ namespace details
 {
     void ParseWeatherString(const std::string& str, Weather& weather)
     {
-        weather.temperature = std::stoi(str);
+        size_t prevOffset = 0;
+        size_t nextOffset = str.find(';');
+        if (nextOffset == std::string::npos)
+        {
+            nextOffset = str.length();
+        }
+        weather.temperature = std::stoi(str.substr(prevOffset, nextOffset - prevOffset));
+
+        if (prevOffset + nextOffset >= str.length())
+        {
+            return;
+        }
+        prevOffset = prevOffset + nextOffset + 1;
+        nextOffset = str.find(';', prevOffset);
+        if (nextOffset == std::string::npos)
+        {
+            nextOffset = str.length();
+        }
+        weather.windDirection = std::stoi(str.substr(prevOffset, nextOffset - prevOffset));
     }
 }
 
