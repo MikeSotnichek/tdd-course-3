@@ -140,6 +140,14 @@ private:
     };
 };
 
+namespace details
+{
+    void ParseWeatherString(const std::string& str, Weather& weather)
+    {
+        weather.temperature = 20;
+    }
+}
+
 TEST(WeatherClient, ParseWeatherTemperature)
 {
     Weather weather;
