@@ -142,27 +142,39 @@ private:
 
 namespace details
 {
+
+    void GetTokensFromString(const std::string& source,
+                             const char delim,
+                             std::vector<std::string>& tokens)
+    {
+        size_t start = 0;
+        size_t end = 0;
+        while(end < source.length())
+        {
+            end = source.find(delim, start);
+            if (end == std::string::npos)
+            {
+                end = source.length();
+            }
+            tokens.push_back(source.substr(start, end - start));
+            start = end + 1;
+        }
+    }
+
     void ParseWeatherString(const std::string& str, Weather& weather)
     {
-        size_t prevOffset = 0;
-        size_t nextOffset = str.find(';');
-        if (nextOffset == std::string::npos)
-        {
-            nextOffset = str.length();
-        }
-        weather.temperature = std::stoi(str.substr(prevOffset, nextOffset - prevOffset));
+        std::vector<std::string> tokens;
+        GetTokensFromString(str, ';', tokens);
 
-        if (prevOffset + nextOffset >= str.length())
+        if (tokens.size() > 0)
         {
-            return;
+            weather.temperature = std::stoi(tokens[0]);
         }
-        prevOffset = prevOffset + nextOffset + 1;
-        nextOffset = str.find(';', prevOffset);
-        if (nextOffset == std::string::npos)
+
+        if (tokens.size() > 1)
         {
-            nextOffset = str.length();
+            weather.windDirection = std::stoi(tokens[1]);
         }
-        weather.windDirection = std::stoi(str.substr(prevOffset, nextOffset - prevOffset));
     }
 }
 
