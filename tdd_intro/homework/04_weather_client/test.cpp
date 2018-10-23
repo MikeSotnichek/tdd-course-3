@@ -219,7 +219,7 @@ public:
 
     virtual double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
     {
-        return 0;
+        return 20;
     }
 
     virtual double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
@@ -311,5 +311,5 @@ TEST(WeatherClient, GetAverageTemp2) {
 TEST(WeatherClient, GetMinimumTemp1) {
     MyWeatherClient client;
     FakeWeatherServer server;
-    EXPECT_EQ(20, client.GetAverageTemperature(server, "31.08.2018"));
+    EXPECT_EQ(20, client.GetMinimumTemperature(server, "31.08.2018"));
 }
