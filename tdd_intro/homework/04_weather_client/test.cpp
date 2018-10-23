@@ -332,3 +332,15 @@ TEST(WeatherClient, GetMaxTemp1) {
     FakeWeatherServer server;
     EXPECT_EQ(33, client.GetMaximumTemperature(server, "31.08.2018"));
 }
+
+TEST(WeatherClient, GetMaxTemp2) {
+    MyWeatherClient client;
+    FakeWeatherServer server;
+    EXPECT_EQ(34, client.GetMaximumTemperature(server, "02.09.2018"));
+}
+
+TEST(WeatherClient, GetAverageWind1) {
+    MyWeatherClient client;
+    FakeWeatherServer server;
+    EXPECT_EQ(189.25, client.GetAverageWindDirection(server, "31.08.2018"));
+}
