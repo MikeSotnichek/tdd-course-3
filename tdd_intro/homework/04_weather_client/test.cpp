@@ -52,6 +52,10 @@ struct Weather
     short temperature = 0;
     unsigned short windDirection = 0;
     double windSpeed = 0;
+
+    Weather() : Weather(0, 0, 0) {}
+    Weather(short temperature, unsigned short windDirection, double windSpeed) : temperature(temperature), windDirection(windDirection), windSpeed(windSpeed) {}
+
     bool operator==(const Weather& right) const
     {
         return temperature == right.temperature &&
@@ -215,9 +219,6 @@ TEST(WeatherClient, ParseWeatherStringAcceptance)
 {
     Weather weather;
     details::ParseWeatherString("-3;250;5.5", weather);
-    Weather expected;
-    expected.temperature = -3;
-    expected.windDirection = 250;
-    expected.windSpeed = 5.5;
+    Weather expected(-3, 250, 5.5);
     EXPECT_EQ(expected, weather);
 }
