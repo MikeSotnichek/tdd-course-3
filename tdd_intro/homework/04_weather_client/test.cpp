@@ -244,7 +244,10 @@ public:
 
     virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
     {
-        return 0;
+        std::vector<Weather> weatherData;
+        details::GetDayWeatherData(server, date, weatherData);
+        double max = std::accumulate(weatherData.begin(), weatherData.end(), std::numeric_limits<double>::min(), [](double max, Weather& weather){ return weather.windSpeed > max ? weather.windSpeed : max;});
+        return max;
     }
 };
 
@@ -357,5 +360,5 @@ TEST(WeatherClient, GetAverageWind2) {
 TEST(WeatherClient, GetMaximumWind1) {
     MyWeatherClient client;
     FakeWeatherServer server;
-    EXPECT_EQ(5.1, client.GetAverageWindDirection(server, "31.08.2018"));
+    EXPECT_EQ(5.1, client.GetMaximumWindSpeed(server, "31.08.2018"));
 }
