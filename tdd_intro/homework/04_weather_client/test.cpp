@@ -191,6 +191,17 @@ namespace details
         std::string responce = server.GetWeather(request);
         ParseWeatherString(responce, weather);
     }
+
+    void GetDayWeatherData(IWeatherServer& server, const std::string& date, std::vector<Weather>& weather)
+    {
+        static const std::vector<std::string> s_dayTimes = {"03:00", "09:00", "15:00", "21:00"};
+        for (const auto& item : s_dayTimes)
+        {
+            Weather current;
+            GetWeatherData(server, date + ";" + item, current);
+            weather.push_back(current);
+        }
+    }
 }
 
 TEST(WeatherClient, ParseWeatherTemperature)
