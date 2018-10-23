@@ -52,7 +52,7 @@ struct Weather
     short temperature = 0;
     unsigned short windDirection = 0;
     double windSpeed = 0;
-    bool operator==(const Weather& right)
+    bool operator==(const Weather& right) const
     {
         return temperature == right.temperature &&
                windDirection == right.windDirection &&
