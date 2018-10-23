@@ -47,6 +47,7 @@ IMPORTANT:
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <numeric>
+#include <limits>
 
 struct Weather
 {
@@ -219,7 +220,10 @@ public:
 
     virtual double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
     {
-        return 20;
+        std::vector<Weather> weatherData;
+        details::GetDayWeatherData(server, date, weatherData);
+        double min = std::accumulate(weatherData.begin(), weatherData.end(), std::numeric_limits<double>::max(), [](double min, Weather& weather){ return weather.temperature < min ? weather.temperature : min;});
+        return min;
     }
 
     virtual double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
