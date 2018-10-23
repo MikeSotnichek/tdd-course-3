@@ -114,7 +114,8 @@ class FakeWeatherServer : public IWeatherServer
 {
 public:
     virtual ~FakeWeatherServer() { }
-    virtual std::string GetWeather(const std::string& request) {
+    virtual std::string GetWeather(const std::string& request) override
+    {
         std::string responce = "";
         try
         {
