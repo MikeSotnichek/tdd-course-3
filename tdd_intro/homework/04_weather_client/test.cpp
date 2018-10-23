@@ -175,6 +175,11 @@ namespace details
         {
             weather.windDirection = std::stoi(tokens[1]);
         }
+
+        if (tokens.size() > 2)
+        {
+            weather.windSpeed = std::stod(tokens[2]);
+        }
     }
 }
 
@@ -205,4 +210,3 @@ TEST(WeatherClient, ParseWeatherWindSpeed)
     details::ParseWeatherString("35;100;15.5", weather);
     EXPECT_EQ(15.5, weather.windSpeed);
 }
-
