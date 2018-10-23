@@ -111,7 +111,7 @@ public:
  * 8. get max wind speed another date (acceptance)
  */
 
-class FakeWeatherServer : IWeatherServer
+class FakeWeatherServer : public IWeatherServer
 {
 public:
     virtual ~FakeWeatherServer() { }
@@ -184,6 +184,12 @@ namespace details
         {
             weather.windSpeed = std::stod(tokens[2]);
         }
+    }
+
+    void GetWeatherData(IWeatherServer& server, const std::string& request, Weather& weather)
+    {
+        std::string responce = server.GetWeather(request);
+        ParseWeatherString(responce, weather);
     }
 }
 
