@@ -91,7 +91,6 @@ public:
  * 0.2. Parse wind direction
  * 0.3. Parse wind speed
  * 1. get data for single date-time
- * -2. get day hours (3, 9, 15, 21)-
  * 3. collect day data
  *
  * public functions
@@ -146,7 +145,6 @@ private:
 
 namespace details
 {
-
     void GetTokensFromString(const std::string& source,
                              const char delim,
                              std::vector<std::string>& tokens)
@@ -260,4 +258,10 @@ TEST(WeatherClient, GetWholeDayData)
     EXPECT_EQ(Weather(23,204,4.9), weather[1]);
     EXPECT_EQ(Weather(33,193,4.3), weather[2]);
     EXPECT_EQ(Weather(26,179,4.5), weather[3]);
+}
+
+TEST(WeatherClient, GetAverageTemp1) {
+    MyWeatherClient client;
+    FakeWeatherServer server;
+    EXPECT_EQ(25.5, client.GetAverageTemperature(server, "31.08.2018"));
 }
