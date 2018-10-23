@@ -91,7 +91,7 @@ public:
  * 0.2. Parse wind direction
  * 0.3. Parse wind speed
  * 1. get data for single date-time
- * 2. get day hours (3, 9, 15, 21)
+ * -2. get day hours (3, 9, 15, 21)-
  * 3. collect day data
  *
  * public functions
@@ -236,4 +236,17 @@ TEST(WeatherClient, GetSingleDateTimeData)
     details::GetWeatherData(server, "31.08.2018;03:00", weather);
     Weather expected(20,181,5.1);
     EXPECT_EQ(expected, weather);
+}
+
+TEST(WeatherClient, GetWholeDayData)
+{
+    FakeWeatherServer server;
+    std::vector<Weather> weather;
+    details::GetDayWeatherData(server, "31.08.2018", weather);
+
+    ASSERT_EQ(4, weather.size());
+    EXPECT_EQ(Weather(20,181,5.1), weather[0]);
+    EXPECT_EQ(Weather(23,204,4.9), weather[1]);
+    EXPECT_EQ(Weather(33,193,4.3), weather[2]);
+    EXPECT_EQ(Weather(26,179,4.5), weather[3]);
 }
