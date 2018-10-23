@@ -222,3 +222,12 @@ TEST(WeatherClient, ParseWeatherStringAcceptance)
     Weather expected(-3, 250, 5.5);
     EXPECT_EQ(expected, weather);
 }
+
+TEST(WeatherClient, GetSingleDateTimeData)
+{
+    FakeWeatherServer server;
+    Weather weather;
+    details::GetWeatherData(server, "31.08.2018;03:00", weather);
+    Weather expected(20,181,5.1);
+    EXPECT_EQ(expected, weather);
+}
