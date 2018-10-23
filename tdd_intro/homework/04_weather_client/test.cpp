@@ -228,7 +228,10 @@ public:
 
     virtual double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
     {
-        return 0;
+        std::vector<Weather> weatherData;
+        details::GetDayWeatherData(server, date, weatherData);
+        double max = std::accumulate(weatherData.begin(), weatherData.end(), std::numeric_limits<double>::min(), [](double max, Weather& weather){ return weather.temperature > max ? weather.temperature : max;});
+        return max;
     }
 
     virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
