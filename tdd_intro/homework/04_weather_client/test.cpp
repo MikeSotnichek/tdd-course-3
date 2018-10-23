@@ -236,7 +236,10 @@ public:
 
     virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
     {
-        return 0;
+        std::vector<Weather> weatherData;
+        details::GetDayWeatherData(server, date, weatherData);
+        double sum = std::accumulate(weatherData.begin(), weatherData.end(), 0, [](double sum, Weather& weather){ return sum + weather.windDirection;});
+        return sum / weatherData.size();
     }
 
     virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
