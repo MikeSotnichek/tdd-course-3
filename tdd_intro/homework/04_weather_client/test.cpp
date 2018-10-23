@@ -210,3 +210,14 @@ TEST(WeatherClient, ParseWeatherWindSpeed)
     details::ParseWeatherString("35;100;15.5", weather);
     EXPECT_EQ(15.5, weather.windSpeed);
 }
+
+TEST(WeatherClient, ParseWeatherStringAcceptance)
+{
+    Weather weather;
+    details::ParseWeatherString("-3;250;5.5", weather);
+    Weather expected;
+    expected.temperature = -3;
+    expected.windDirection = 250;
+    expected.windSpeed = 5.5;
+    EXPECT_EQ(expected, weather);
+}
