@@ -214,7 +214,10 @@ public:
     {
         std::vector<Weather> weatherData;
         details::GetDayWeatherData(server, date, weatherData);
-        double sum = std::accumulate(weatherData.begin(), weatherData.end(), 0, [](double sum, Weather& weather){ return sum + weather.temperature;});
+        double sum = std::accumulate(weatherData.begin(),
+                                     weatherData.end(),
+                                     0.0,
+                                     [](double sum, Weather& weather){ return sum + weather.temperature;});
         return sum / weatherData.size();
     }
 
@@ -222,7 +225,10 @@ public:
     {
         std::vector<Weather> weatherData;
         details::GetDayWeatherData(server, date, weatherData);
-        double min = std::accumulate(weatherData.begin(), weatherData.end(), std::numeric_limits<double>::max(), [](double min, Weather& weather){ return weather.temperature < min ? weather.temperature : min;});
+        double min = std::accumulate(weatherData.begin(),
+                                     weatherData.end(),
+                                     std::numeric_limits<double>::max(),
+                                     [](double min, Weather& weather){ return weather.temperature < min ? weather.temperature : min;});
         return min;
     }
 
@@ -230,7 +236,10 @@ public:
     {
         std::vector<Weather> weatherData;
         details::GetDayWeatherData(server, date, weatherData);
-        double max = std::accumulate(weatherData.begin(), weatherData.end(), std::numeric_limits<double>::min(), [](double max, Weather& weather){ return weather.temperature > max ? weather.temperature : max;});
+        double max = std::accumulate(weatherData.begin(),
+                                     weatherData.end(),
+                                     std::numeric_limits<double>::min(),
+                                     [](double max, Weather& weather){ return weather.temperature > max ? weather.temperature : max;});
         return max;
     }
 
@@ -238,7 +247,10 @@ public:
     {
         std::vector<Weather> weatherData;
         details::GetDayWeatherData(server, date, weatherData);
-        double sum = std::accumulate(weatherData.begin(), weatherData.end(), 0, [](double sum, Weather& weather){ return sum + weather.windDirection;});
+        double sum = std::accumulate(weatherData.begin(),
+                                     weatherData.end(),
+                                     0.0,
+                                     [](double sum, Weather& weather){ return sum + weather.windDirection;});
         return sum / weatherData.size();
     }
 
@@ -246,7 +258,10 @@ public:
     {
         std::vector<Weather> weatherData;
         details::GetDayWeatherData(server, date, weatherData);
-        double max = std::accumulate(weatherData.begin(), weatherData.end(), std::numeric_limits<double>::min(), [](double max, Weather& weather){ return weather.windSpeed > max ? weather.windSpeed : max;});
+        double max = std::accumulate(weatherData.begin(),
+                                     weatherData.end(),
+                                     std::numeric_limits<double>::min(),
+                                     [](double max, Weather& weather){ return weather.windSpeed > max ? weather.windSpeed : max;});
         return max;
     }
 };
@@ -361,4 +376,10 @@ TEST(WeatherClient, GetMaximumWind1) {
     MyWeatherClient client;
     FakeWeatherServer server;
     EXPECT_EQ(5.1, client.GetMaximumWindSpeed(server, "31.08.2018"));
+}
+
+TEST(WeatherClient, GetMaximumWind2) {
+    MyWeatherClient client;
+    FakeWeatherServer server;
+    EXPECT_EQ(4.2, client.GetMaximumWindSpeed(server, "01.09.2018"));
 }
