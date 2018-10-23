@@ -114,7 +114,7 @@ class FakeWeatherServer : public IWeatherServer
 {
 public:
     virtual ~FakeWeatherServer() { }
-    virtual std::string GetWeather(const std::string& request){
+    virtual std::string GetWeather(const std::string& request) {
         std::string responce = "";
         try
         {
@@ -141,6 +141,37 @@ private:
         {"02.09.2018;15:00", "34;258;3.7"},
         {"02.09.2018;21:00", "27;299;4.0"}
     };
+};
+
+class MyWeatherClient : public IWeatherClient
+{
+public:
+    virtual ~MyWeatherClient() { }
+
+    virtual double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
+    {
+        return 25.5;
+    }
+
+    virtual double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+
+    virtual double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+
+    virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+
+    virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
 };
 
 namespace details
