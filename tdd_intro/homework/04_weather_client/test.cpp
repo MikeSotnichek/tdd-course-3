@@ -79,3 +79,59 @@ public:
     virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) = 0;
     virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) = 0;
 };
+
+/* Test list:
+ * helper functions
+ * 1. get data for single date-time
+ * 2. get day hours (3, 9, 15, 21)
+ * 3. collect day data
+ *
+ * public functions
+ * 1. get average temperature for one date
+ * 2. get average temperature for another date (acceptance)
+ *
+ * 3. get min temperature for one date
+ * 4. get min temperature for another date (acceptance)
+ *
+ * 5. get max temperature for one date
+ * 6. get max temperature for another date (acceptance)
+ *
+ * 7. get average wind for one date
+ * 8. get average wind for another date (acceptance)
+ *
+ * 7. get max wind speed for one date
+ * 8. get max wind speed another date (acceptance)
+ */
+
+class FakeWeatherServer : IWeatherServer
+{
+public:
+    virtual ~FakeWeatherServer() { }
+    virtual std::string GetWeather(const std::string& request){
+        std::string responce = "";
+        try
+        {
+            responce = responces.at(request);
+        }
+        catch (const std::exception& /*ex*/)
+        {
+            //invalid request
+        }
+        return responce;
+    }
+private:
+    std::map<std::string, std::string> responces = {
+        {"31.08.2018;03:00", "20;181;5.1"},
+        {"31.08.2018;09:00", "23;204;4.9"},
+        {"31.08.2018;15:00", "33;193;4.3"},
+        {"31.08.2018;21:00", "26;179;4.5"},
+        {"01.09.2018;03:00", "19;176;4.2"},
+        {"01.09.2018;09:00", "22;131;4.1"},
+        {"01.09.2018;15:00", "31;109;4.0"},
+        {"01.09.2018;21:00", "24;127;4.1"},
+        {"02.09.2018;03:00", "21;158;3.8"},
+        {"02.09.2018;09:00", "25;201;3.5"},
+        {"02.09.2018;15:00", "34;258;3.7"},
+        {"02.09.2018;21:00", "27;299;4.0"}
+    };
+};
