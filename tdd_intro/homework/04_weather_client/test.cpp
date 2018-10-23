@@ -144,7 +144,7 @@ namespace details
 {
     void ParseWeatherString(const std::string& str, Weather& weather)
     {
-        weather.temperature = 20;
+        weather.temperature = std::stoi(str);
     }
 }
 
