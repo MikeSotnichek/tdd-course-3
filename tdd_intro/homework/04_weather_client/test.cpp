@@ -46,6 +46,7 @@ IMPORTANT:
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <numeric>
 
 struct Weather
 {
@@ -144,37 +145,6 @@ private:
     };
 };
 
-class MyWeatherClient : public IWeatherClient
-{
-public:
-    virtual ~MyWeatherClient() { }
-
-    virtual double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
-    {
-        return 25.5;
-    }
-
-    virtual double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
-    {
-        return 0;
-    }
-
-    virtual double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
-    {
-        return 0;
-    }
-
-    virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
-    {
-        return 0;
-    }
-
-    virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
-    {
-        return 0;
-    }
-};
-
 namespace details
 {
     void GetTokensFromString(const std::string& source,
@@ -233,6 +203,40 @@ namespace details
         }
     }
 }
+
+class MyWeatherClient : public IWeatherClient
+{
+public:
+    virtual ~MyWeatherClient() { }
+
+    virtual double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
+    {
+        std::vector<Weather> weatherData;
+        details::GetDayWeatherData(server, date, weatherData);
+        double sum = std::accumulate(weatherData.begin(), weatherData.end(), 0, [](double sum, Weather& weather){ return sum + weather.temperature;});
+        return sum / weatherData.size();
+    }
+
+    virtual double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+
+    virtual double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+
+    virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+
+    virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
+    {
+        return 0;
+    }
+};
 
 TEST(WeatherClient, ParseWeatherTemperature)
 {
