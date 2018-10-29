@@ -36,7 +36,7 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
     for(size_t i = 0; i < str.length(); i += wrapLength)
     {
         std::string cur = str.substr(i, wrapLength);
-        if (cur.back() == ' ')
+        while (!cur.empty() && cur.back() == ' ')
         {
             cur.pop_back();
         }
