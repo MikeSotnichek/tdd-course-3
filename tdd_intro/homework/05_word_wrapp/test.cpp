@@ -18,6 +18,22 @@ ignoring any possible match beginning after pos
 #include <gtest/gtest.h>
 #include <cctype>
 
+using WrappedStrings = std::vector<std::string>;
+
+// Test list for SplitWords:
+// single word
+// single word with whitespace
+// two words
+// more whitespace between words
+// more words
+//
+
+std::vector<std::string> SplitWords(const std::string& str)
+{
+    return { str };
+}
+
+// Test list for WrapString:
 // empty string
 // string shorter than wrap number
 // string shorter that ends with space
@@ -27,18 +43,9 @@ ignoring any possible match beginning after pos
 // word much longer than wrap number (more than 2 strings)
 // string longer than wrap number
 //
-// string wrapped by several whitespaces (less than wrapLength)
-// string wrapped by several whitespaces (more than wrapLength)
-// only whitespaces in string
+// string wrapped in middle of word
 
-// split wraps by words, add words as necessary or cut long words.
-
-using WrappedStrings = std::vector<std::string>;
-
-std::vector<std::string> SplitWords(const std::string& str)
-{
-    return { str };
-}
+// split string by words, add words as necessary or cut long words.
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
