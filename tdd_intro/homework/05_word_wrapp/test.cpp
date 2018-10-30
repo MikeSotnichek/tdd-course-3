@@ -195,7 +195,37 @@ TEST(WrapString, Acceptance)
         "any possible match beginning",
         "after pos."
     };
-    EXPECT_EQ(shortStr, WrapString("When pos is specified, the search only includes sequences of characters that begin at or before position pos, ignoring any possible match beginning after pos.", 30));
+    EXPECT_EQ(shortStr, WrapString("When pos is specified, the search  only includes sequences of characters that begin at or before position pos, ignoring any possible match beginning after pos.", 30));
+}
+
+TEST(WrapString, Acceptance2)
+{
+    WrappedStrings shortStr = {
+        "When pos",
+        "is",
+        "specifie",
+        "d, the",
+        "search",
+        "only",
+        "includes",
+        "sequence",
+        "s of",
+        "characte",
+        "rs that",
+        "begin at",
+        "or",
+        "before",
+        "position",
+        "pos,",
+        "ignoring",
+        "any",
+        "possible",
+        "match",
+        "beginnin",
+        "g after",
+        "pos."
+    };
+    EXPECT_EQ(shortStr, WrapString("When pos is specified, the search  only includes sequences of characters that begin at or before position pos, ignoring any possible match beginning after pos.", 8));
 }
 
 TEST(SplitWords, OneWord)
