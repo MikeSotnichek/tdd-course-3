@@ -24,6 +24,11 @@ ignoring any possible match beginning after pos
 // word much longer than wrap number (more than 2 strings)
 // string longer than wrap number
 
+// string wrapped in middle of word (should wrap on whitespace)
+// string wrapped in middle on two sides
+// wrap with word at end
+// wrap by space and by word
+
 // string wrapped by several whitespaces (less than wrapLength)
 // string wrapped by several whitespaces (more than wrapLength)
 // only whitespaces in string
@@ -52,15 +57,8 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
             i += wrapLength;
         }
 
-        while (!cur.empty() && cur.back() == ' ')
-        {
-            cur.pop_back();
-        }
-
-        while (!cur.empty() && cur.front() == ' ')
-        {
-            cur = cur.substr(1);
-        }
+        cur.erase(cur.cbegin(), std::find_if_not(cur.begin(), cur.end(), std::isspace));
+        cur.erase(std::find_if_not(cur.rbegin(), cur.rend(), std::isspace).base(), cur.cend());
 
         if(!cur.empty())
         {
