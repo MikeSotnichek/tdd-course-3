@@ -18,14 +18,14 @@ ignoring any possible match beginning after pos
 #include <gtest/gtest.h>
 #include <cctype>
 
-// empty string
-// string shorter than wrap number
-// word longer than wrap number
-// word much longer than wrap number (more than 2 strings)
-// string longer than wrap number
+// empty string +
+// string shorter than wrap number +
+// word longer than wrap number +
+// word much longer than wrap number (more than 2 strings) +
+// string longer than wrap number +
 
-// string wrapped in middle of word (should wrap on whitespace)
-// string wrapped in middle on two sides
+// string wrapped in middle of word (should wrap on whitespace) +
+// string wrapped in middle on two sides +
 // wrap with word at end
 // wrap by space and by word
 
@@ -58,7 +58,7 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
             pos += wrapLength;
         }
 
-        cur.erase(cur.cbegin(), std::find_if_not(cur.begin(), cur.end(), std::isspace));
+        cur.erase(cur.cbegin(), std::find_if_not(cur.begin(), cur.end(), std::isspace)); // trim edges
         cur.erase(std::find_if_not(cur.rbegin(), cur.rend(), std::isspace).base(), cur.cend());
 
         if(!cur.empty())
@@ -126,4 +126,16 @@ TEST(WrapString, StringWrappedInMiddleOfWord)
 {
     WrappedStrings expected = {"1234", "5678"};
     ASSERT_EQ(expected, WrapString("1234 5678", 4));
+}
+
+TEST(WrapString, StringWrappedInMiddleOfWord2)
+{
+    WrappedStrings expected = {"1", "23", "4"};
+    ASSERT_EQ(expected, WrapString("1 23 4", 3));
+}
+
+TEST(WrapString, StringWrappedWordAtEnd)
+{
+    WrappedStrings expected = {"1 2", "3"};
+    ASSERT_EQ(expected, WrapString("1 2 3", 3));
 }
