@@ -76,26 +76,28 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
     std::string wrap;
     for (const auto word : words)
     {
+        if (!wrap.empty() && wrap.length() + word.length() > wrapLength)
+        {
+            strings.push_back(trim(wrap));
+            wrap.clear();
+        }
+
         if (word.length() > wrapLength)
         {
             size_t pos = 0;
             while (pos + wrapLength < word.length()) {
-                wrap = str.substr(pos, wrapLength);
+                wrap = word.substr(pos, wrapLength);
                 strings.push_back(wrap);
                 pos += wrapLength;
             }
-            wrap = str.substr(pos, wrapLength);
+            wrap = word.substr(pos, wrapLength);
         }
         else
         {
-            if (wrap.length() + word.length() > wrapLength)
-            {
-                strings.push_back(trim(wrap));
-                wrap.clear();
-            }
             wrap.append(word);
-            wrap.append(" ");
         }
+
+        wrap.append(" ");
     }
 
     if (!wrap.empty())
