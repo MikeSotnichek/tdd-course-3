@@ -19,6 +19,7 @@ ignoring any possible match beginning after pos
 #include <cctype>
 
 using WrappedStrings = std::vector<std::string>;
+using Words = std::vector<std::string>;
 
 std::string trim(const std::string& str)
 {
@@ -36,7 +37,7 @@ std::string trim(const std::string& str)
 // more words
 //
 
-std::vector<std::string> SplitWords(const std::string& str)
+Words SplitWords(const std::string& str)
 {
     return { trim(str) };
 }
@@ -135,12 +136,12 @@ TEST(WrapString, LongStringWithSpace3)
 
 TEST(SplitWords, OneWord)
 {
-    std::vector<std::string> expected = {"a"};
+    Words expected = {"a"};
     EXPECT_EQ(expected, SplitWords("a"));
 }
 
 TEST(SplitWords, OneWordWithSpace)
 {
-    std::vector<std::string> expected = {"a"};
+    Words expected = {"a"};
     EXPECT_EQ(expected, SplitWords(" a "));
 }
