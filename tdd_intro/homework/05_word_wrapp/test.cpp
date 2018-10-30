@@ -145,3 +145,9 @@ TEST(SplitWords, OneWordWithSpace)
     Words expected = {"a"};
     EXPECT_EQ(expected, SplitWords(" a "));
 }
+
+TEST(SplitWords, TwoWords)
+{
+    Words expected = {"a", "b"};
+    EXPECT_EQ(expected, SplitWords("a b"));
+}
