@@ -20,6 +20,14 @@ ignoring any possible match beginning after pos
 
 using WrappedStrings = std::vector<std::string>;
 
+std::string trim(const std::string& str)
+{
+    std::string trimmed = str;
+    trimmed.erase(trimmed.cbegin(), std::find_if_not(trimmed.begin(), trimmed.end(), std::isspace));
+    trimmed.erase(std::find_if_not(trimmed.rbegin(), trimmed.rend(), std::isspace).base(), trimmed.cend());
+    return trimmed;
+}
+
 // Test list for SplitWords:
 // single word
 // single word with whitespace
@@ -30,10 +38,7 @@ using WrappedStrings = std::vector<std::string>;
 
 std::vector<std::string> SplitWords(const std::string& str)
 {
-    std::string word = str;
-    word.erase(word.cbegin(), std::find_if_not(word.begin(), word.end(), std::isspace));
-    word.erase(std::find_if_not(word.rbegin(), word.rend(), std::isspace).base(), word.cend());
-    return { word };
+    return { trim(str) };
 }
 
 // Test list for WrapString:
@@ -57,9 +62,7 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
     WrappedStrings strings;
     while (pos < str.length()) {
 
-        std::string wrap = str.substr(pos, wrapLength);
-        wrap.erase(wrap.cbegin(), std::find_if_not(wrap.begin(), wrap.end(), std::isspace));
-        wrap.erase(std::find_if_not(wrap.rbegin(), wrap.rend(), std::isspace).base(), wrap.cend());
+        std::string wrap = trim(str.substr(pos, wrapLength));
         if (!wrap.empty())
         {
             strings.push_back(wrap);
