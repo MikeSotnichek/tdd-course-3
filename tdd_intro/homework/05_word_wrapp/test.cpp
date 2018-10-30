@@ -22,10 +22,11 @@ ignoring any possible match beginning after pos
 // string shorter than wrap number
 // string shorter that ends with space
 // string shorter that begins with space (trim spaces)
+//
 // word longer than wrap number
 // word much longer than wrap number (more than 2 strings)
 // string longer than wrap number
-
+//
 // string wrapped by several whitespaces (less than wrapLength)
 // string wrapped by several whitespaces (more than wrapLength)
 // only whitespaces in string
@@ -59,4 +60,16 @@ TEST(WrapString, ShortStringSpaceEnd)
 {
     WrappedStrings shortStr = {"a"};
     EXPECT_EQ(shortStr, WrapString("a ", 1));
+}
+
+TEST(WrapString, ShortStringSpaceBegin)
+{
+    WrappedStrings shortStr = {"a"};
+    EXPECT_EQ(shortStr, WrapString(" a", 1));
+}
+
+TEST(WrapString, LongStringSplitIn2)
+{
+    WrappedStrings shortStr = {"a", "b"};
+    EXPECT_EQ(shortStr, WrapString("ab", 1));
 }
