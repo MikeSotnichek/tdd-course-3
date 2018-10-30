@@ -39,7 +39,19 @@ std::string trim(const std::string& str)
 
 Words SplitWords(const std::string& str)
 {
-    return { trim(str) };
+    Words words;
+    auto pos = str.begin();
+    while (pos != str.end())
+    {
+        auto end = std::find_if(pos, str.end(), std::isspace);
+        std::string word = trim(std::string(pos, end));
+        if (!word.empty())
+        {
+            words.push_back(word);
+        }
+        pos = std::find_if_not(end, str.end(), std::isspace);
+    }
+    return words;
 }
 
 // Test list for WrapString:
