@@ -32,65 +32,11 @@ using WrappedStrings = std::vector<std::string>;
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
-    WrappedStrings result;
-    for(size_t i = 0; i < str.length(); i += wrapLength)
-    {
-        std::string cur = str.substr(i, wrapLength);
-        if (cur.back() == ' ')
-        {
-            cur.pop_back();
-        }
-
-        if(!cur.empty() && cur.front() == ' ')
-        {
-            cur = cur.substr(1);
-        }
-
-        if(!cur.empty())
-        {
-            result.push_back(cur);
-        }
-    }
-
-    return result;
+    return {};
 }
 
-TEST(WrapString, EmptyString)
+TEST(WrapString, WrapEmptyString)
 {
-    ASSERT_EQ(WrappedStrings(), WrapString("", 25));
-}
-
-TEST(WrapString, StringShorterWrapNumber)
-{
-    ASSERT_EQ(WrappedStrings{"asdf"}, WrapString("asdf", 8));
-}
-
-TEST(WrapString, StringLongerThanWrapNumber)
-{
-    WrappedStrings expected = {"asd", "f"};
-    ASSERT_EQ(expected, WrapString("asdf", 3));
-}
-
-TEST(WrapString, StringLongerThanWrapNumberSeveralParts)
-{
-    WrappedStrings expected = {"12", "34", "56"};
-    ASSERT_EQ(expected, WrapString("123456", 2));
-}
-
-TEST(WrapString, MultipleWordsLonger)
-{
-    WrappedStrings expected = {"1", "2"};
-    ASSERT_EQ(expected, WrapString("1 2", 1));
-}
-
-TEST(WrapString, SpaceStringEnd)
-{
-    WrappedStrings expected = {"1", "2"};
-    ASSERT_EQ(expected, WrapString("1 2", 2));
-}
-
-TEST(WrapString, StringWrappedBySeveralWhitespace)
-{
-    WrappedStrings expected = {"12", "34"};
-    ASSERT_EQ(expected, WrapString("12  34", 3));
+    WrappedStrings empty = {};
+    EXPECT_EQ(empty, WrapString("", 1));
 }
