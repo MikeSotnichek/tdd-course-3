@@ -166,6 +166,12 @@ TEST(WrapString, LongStringWithSpace3)
     EXPECT_EQ(shortStr, WrapString("a b c d e", 3));
 }
 
+TEST(WrapString, LongStringWrapWordInMiddle)
+{
+    WrappedStrings shortStr = {"a", "bc"};
+    EXPECT_EQ(shortStr, WrapString("a bc", 3));
+}
+
 TEST(SplitWords, OneWord)
 {
     Words expected = {"a"};
