@@ -88,14 +88,13 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
         }
         else
         {
+            if (wrap.length() + word.length() > wrapLength)
+            {
+                strings.push_back(trim(wrap));
+                wrap.clear();
+            }
             wrap.append(word);
             wrap.append(" ");
-        }
-
-        if (wrap.length() > wrapLength)
-        {
-            strings.push_back(trim(wrap));
-            wrap.clear();
         }
     }
 
