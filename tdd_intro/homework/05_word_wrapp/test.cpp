@@ -37,7 +37,10 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
     WrappedStrings strings;
     std::size_t pos = 0;
+
+
     while (pos < str.length()) {
+
         std::string wrap = str.substr(pos, wrapLength);
         wrap.erase(wrap.cbegin(), std::find_if_not(wrap.begin(), wrap.end(), std::isspace));
         wrap.erase(std::find_if_not(wrap.rbegin(), wrap.rend(), std::isspace).base(), wrap.cend());
@@ -46,6 +49,7 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
             strings.push_back(wrap);
         }
         pos += wrapLength;
+
     }
     return strings;
 }
@@ -90,4 +94,22 @@ TEST(WrapString, ShortStringWithSpace)
 {
     WrappedStrings shortStr = {"a b"};
     EXPECT_EQ(shortStr, WrapString("a b", 4));
+}
+
+TEST(WrapString, LongStringWithSpace)
+{
+    WrappedStrings shortStr = {"a", "b"};
+    EXPECT_EQ(shortStr, WrapString("a b", 1));
+}
+
+TEST(WrapString, LongStringWithSpace2)
+{
+    WrappedStrings shortStr = {"a b", "c"};
+    EXPECT_EQ(shortStr, WrapString("a b c", 3));
+}
+
+TEST(WrapString, LongStringWithSpace3)
+{
+    WrappedStrings shortStr = {"a b", "c d", "e"};
+    EXPECT_EQ(shortStr, WrapString("a b c d e", 3));
 }
