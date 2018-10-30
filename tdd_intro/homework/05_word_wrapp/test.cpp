@@ -177,6 +177,12 @@ TEST(WrapString, LongStringWrapWordInMiddle2)
     EXPECT_EQ(shortStr, WrapString("a bc d", 3));
 }
 
+TEST(WrapString, LongStringWrapWordAndSpaceEnd)
+{
+    WrappedStrings shortStr = {"a", "bcd", "e d"};
+    EXPECT_EQ(shortStr, WrapString("a bcde d", 3));
+}
+
 TEST(WrapString, Acceptance)
 {
     WrappedStrings shortStr = {
