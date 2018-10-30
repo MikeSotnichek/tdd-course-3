@@ -30,7 +30,10 @@ using WrappedStrings = std::vector<std::string>;
 
 std::vector<std::string> SplitWords(const std::string& str)
 {
-    return { str };
+    std::string word = str;
+    word.erase(word.cbegin(), std::find_if_not(word.begin(), word.end(), std::isspace));
+    word.erase(std::find_if_not(word.rbegin(), word.rend(), std::isspace).base(), word.cend());
+    return { word };
 }
 
 // Test list for WrapString:
