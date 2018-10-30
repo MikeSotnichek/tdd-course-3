@@ -132,3 +132,9 @@ TEST(SplitWords, OneWord)
     std::vector<std::string> expected = {"a"};
     EXPECT_EQ(expected, SplitWords("a"));
 }
+
+TEST(SplitWords, OneWordWithSpace)
+{
+    std::vector<std::string> expected = {"a"};
+    EXPECT_EQ(expected, SplitWords(" a "));
+}
