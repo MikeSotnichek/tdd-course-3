@@ -34,11 +34,13 @@ using WrappedStrings = std::vector<std::string>;
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
-    if (str.empty())
+    std::string wrap(str);
+    if (wrap.empty())
     {
         return {};
     }
-    return {str};
+    wrap.erase(std::remove_if(wrap.begin(), wrap.end(), std::isspace), wrap.cend());
+    return {wrap};
 }
 
 TEST(WrapString, WrapEmptyString)
