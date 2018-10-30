@@ -20,6 +20,8 @@ ignoring any possible match beginning after pos
 
 // empty string
 // string shorter than wrap number
+// string shorter that ends with space
+// string shorter that begins with space (trim spaces)
 // word longer than wrap number
 // word much longer than wrap number (more than 2 strings)
 // string longer than wrap number
@@ -49,4 +51,10 @@ TEST(WrapString, ShortStringNoSpace)
 {
     WrappedStrings shortStr = {"a"};
     EXPECT_EQ(shortStr, WrapString("a", 2));
+}
+
+TEST(WrapString, ShortStringSpaceEnd)
+{
+    WrappedStrings shortStr = {"a"};
+    EXPECT_EQ(shortStr, WrapString("a ", 1));
 }
