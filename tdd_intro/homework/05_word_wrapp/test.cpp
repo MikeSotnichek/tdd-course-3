@@ -31,14 +31,20 @@ ignoring any possible match beginning after pos
 // string wrapped by several whitespaces (more than wrapLength)
 // only whitespaces in string
 
+// split wraps by words, add words as necessary or cut long words.
+
 using WrappedStrings = std::vector<std::string>;
+
+std::vector<std::string> SplitWords(const std::string& str)
+{
+    return { str };
+}
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
+    size_t pos = 0;
+
     WrappedStrings strings;
-    std::size_t pos = 0;
-
-
     while (pos < str.length()) {
 
         std::string wrap = str.substr(pos, wrapLength);
@@ -112,4 +118,10 @@ TEST(WrapString, LongStringWithSpace3)
 {
     WrappedStrings shortStr = {"a b", "c d", "e"};
     EXPECT_EQ(shortStr, WrapString("a b c d e", 3));
+}
+
+TEST(SplitWords, OneWord)
+{
+    std::vector<std::string> expected = {"a"};
+    EXPECT_EQ(expected, SplitWords("a"));
 }
