@@ -70,18 +70,27 @@ Words SplitWords(const std::string& str)
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
-    size_t pos = 0;
+    Words words = SplitWords(str);
 
     WrappedStrings strings;
-    while (pos < str.length()) {
-
-        std::string wrap = trim(str.substr(pos, wrapLength));
-        if (!wrap.empty())
+    std::string wrap;
+    for (const auto word : words)
+    {
+        if (word.length() > wrapLength)
         {
-            strings.push_back(wrap);
+            size_t pos = 0;
+            while (pos + wrapLength < word.length()) {
+                wrap = str.substr(pos, wrapLength);
+                strings.push_back(wrap);
+                pos += wrapLength;
+            }
+            wrap = str.substr(pos, wrapLength);
         }
-        pos += wrapLength;
-
+        else
+        {
+            wrap = word;
+        }
+        strings.push_back(wrap);
     }
     return strings;
 }
