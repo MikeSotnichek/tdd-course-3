@@ -78,3 +78,15 @@ TEST(WrapString, LongStringSplitIn2)
     WrappedStrings shortStr = {"a", "b"};
     EXPECT_EQ(shortStr, WrapString("ab", 1));
 }
+
+TEST(WrapString, LongStringSplitInMany)
+{
+    WrappedStrings shortStr = {"a", "b", "c", "d", "e"};
+    EXPECT_EQ(shortStr, WrapString("abcde", 1));
+}
+
+TEST(WrapString, ShortStringWithSpace)
+{
+    WrappedStrings shortStr = {"a b"};
+    EXPECT_EQ(shortStr, WrapString("a b", 4));
+}
