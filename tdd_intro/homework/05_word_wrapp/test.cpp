@@ -35,13 +35,18 @@ using WrappedStrings = std::vector<std::string>;
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
-    std::string wrap(str);
-    if (wrap.empty())
-    {
-        return {};
+    WrappedStrings strings;
+    std::size_t pos = 0;
+    while (pos < str.length()) {
+        std::string wrap = str.substr(pos, wrapLength);
+        wrap.erase(std::remove_if(wrap.begin(), wrap.end(), std::isspace), wrap.cend());
+        if (!wrap.empty())
+        {
+            strings.push_back(wrap);
+        }
+        pos += wrapLength;
     }
-    wrap.erase(std::remove_if(wrap.begin(), wrap.end(), std::isspace), wrap.cend());
-    return {wrap};
+    return strings;
 }
 
 TEST(WrapString, WrapEmptyString)
