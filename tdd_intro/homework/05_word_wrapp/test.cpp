@@ -40,3 +40,9 @@ TEST(WrapString, WrapEmptyString)
     WrappedStrings empty = {};
     EXPECT_EQ(empty, WrapString("", 1));
 }
+
+TEST(WrapString, ShortStringNoSpace)
+{
+    WrappedStrings shortStr = {"a"};
+    EXPECT_EQ(shortStr, WrapString("a", 2));
+}
