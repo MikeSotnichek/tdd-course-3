@@ -171,6 +171,25 @@ TEST(WrapString, LongStringWrapWordInMiddle)
     EXPECT_EQ(shortStr, WrapString("a bc", 3));
 }
 
+TEST(WrapString, LongStringWrapWordInMiddle2)
+{
+    WrappedStrings shortStr = {"a", "bc", "d"};
+    EXPECT_EQ(shortStr, WrapString("a bc d", 3));
+}
+
+TEST(WrapString, Acceptance)
+{
+    WrappedStrings shortStr = {
+        "When pos is specified, the",
+        "search only includes sequences",
+        "of characters that begin at or",
+        "before position pos, ignoring",
+        "any possible match beginning",
+        "after pos."
+    };
+    EXPECT_EQ(shortStr, WrapString("When pos is specified, the search only includes sequences of characters that begin at or before position pos, ignoring any possible match beginning after pos.", 30));
+}
+
 TEST(SplitWords, OneWord)
 {
     Words expected = {"a"};
