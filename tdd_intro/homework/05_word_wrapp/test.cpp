@@ -32,7 +32,11 @@ using WrappedStrings = std::vector<std::string>;
 
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
-    return {};
+    if (str.empty())
+    {
+        return {};
+    }
+    return {str};
 }
 
 TEST(WrapString, WrapEmptyString)
