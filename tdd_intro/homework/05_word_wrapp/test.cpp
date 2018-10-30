@@ -39,7 +39,8 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
     std::size_t pos = 0;
     while (pos < str.length()) {
         std::string wrap = str.substr(pos, wrapLength);
-        wrap.erase(std::remove_if(wrap.begin(), wrap.end(), std::isspace), wrap.cend());
+        wrap.erase(wrap.cbegin(), std::find_if_not(wrap.begin(), wrap.end(), std::isspace));
+        wrap.erase(std::find_if_not(wrap.rbegin(), wrap.rend(), std::isspace).base(), wrap.cend());
         if (!wrap.empty())
         {
             strings.push_back(wrap);
