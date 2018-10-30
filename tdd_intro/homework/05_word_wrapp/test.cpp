@@ -38,9 +38,10 @@ using WrappedStrings = std::vector<std::string>;
 WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 {
     WrappedStrings result;
-    for(size_t i = 0; i < str.length();)
+    size_t pos = 0;
+    while(pos < str.length())
     {
-        std::string cur = str.substr(i, wrapLength);
+        std::string cur = str.substr(pos, wrapLength);
 
         auto lastWordStart = std::find_if(
                     cur.rbegin(),
@@ -49,12 +50,12 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
 
         if (lastWordStart != cur.rend())
         {
-            i += cur.rend() - lastWordStart; // offset to include the last word in next wrap
+            pos += cur.rend() - lastWordStart; // offset to include the last word in next wrap
             cur.erase((lastWordStart + 1).base(), cur.cend()); // erase the last word from current wrap
         }
         else
         {
-            i += wrapLength;
+            pos += wrapLength;
         }
 
         cur.erase(cur.cbegin(), std::find_if_not(cur.begin(), cur.end(), std::isspace));
