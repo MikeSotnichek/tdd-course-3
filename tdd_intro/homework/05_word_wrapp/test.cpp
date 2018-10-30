@@ -144,3 +144,33 @@ TEST(WrapString, StringWrappedWordAtEnd)
     WrappedStrings expected = {"1 2", "3"};
     ASSERT_EQ(expected, WrapString("1 2 3", 3));
 }
+
+TEST(WrapString, StringWrappedBySpaceAndByWord)
+{
+    WrappedStrings expected = {"1 2", "345", "67"};
+    ASSERT_EQ(expected, WrapString("1 2 34567", 3));
+}
+
+TEST(WrapString, StringWrappedBySpaceAndByWord2)
+{
+    WrappedStrings expected = {"345", "67", "8"};
+    ASSERT_EQ(expected, WrapString("34567 8", 3));
+}
+
+TEST(WrapString, StringWrappedWordAtEnd2)
+{
+    WrappedStrings expected = {"1 2", "3 4", "5"};
+    ASSERT_EQ(expected, WrapString("1 2 3 4 5", 3));
+}
+
+TEST(WrapString, Acceptance)
+{
+    WrappedStrings expected = {
+        "When pos is specified, the",
+        "search only includes sequences",
+        "of characters that begin at or",
+        "before position pos, ignoring",
+        "any possible match beginning",
+        "after pos."};
+    ASSERT_EQ(expected, WrapString("When pos is specified, the search only includes sequences of characters that begin at or before position pos, ignoring any possible match beginning after pos.", 30));
+}
