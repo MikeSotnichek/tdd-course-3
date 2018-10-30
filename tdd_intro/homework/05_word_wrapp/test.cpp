@@ -26,7 +26,7 @@ ignoring any possible match beginning after pos
 
 // string wrapped in middle of word (should wrap on whitespace) +
 // string wrapped in middle on two sides +
-// wrap with word at end
+// wrap with word at end +
 // wrap by space and by word
 
 // string wrapped by several whitespaces (less than wrapLength)
@@ -41,21 +41,25 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
     size_t pos = 0;
     while(pos < str.length())
     {
+        size_t offset = wrapLength;
         std::string cur = str.substr(pos, wrapLength);
 
-        auto lastWordStart = std::find_if(
-                    cur.rbegin(),
-                    cur.rend(),
-                    std::isspace); // find the beginning of last word
+        if (pos + wrapLength < str.length())
+        {
+            std::string next = str.substr(pos + wrapLength, wrapLength);
+            if (!std::isspace(*next.begin()))
+            {
+                auto lastWordStart = std::find_if(
+                            cur.rbegin(),
+                            cur.rend(),
+                            std::isspace); // find the beginning of last word
 
-        if (lastWordStart != cur.rend())
-        {
-            pos += cur.rend() - lastWordStart; // offset to include the last word in next wrap
-            cur.erase((lastWordStart + 1).base(), cur.cend()); // erase the last word from current wrap
-        }
-        else
-        {
-            pos += wrapLength;
+                if (lastWordStart != cur.rend())
+                {
+                    offset = cur.rend() - lastWordStart; // offset to include the last word in next wrap
+                    cur.erase((lastWordStart + 1).base(), cur.cend()); // erase the last word from current wrap
+                }
+            }
         }
 
         cur.erase(cur.cbegin(), std::find_if_not(cur.begin(), cur.end(), std::isspace)); // trim edges
@@ -65,6 +69,7 @@ WrappedStrings WrapString(const std::string& str, size_t wrapLength)
         {
             result.push_back(cur);
         }
+        pos += offset;
     }
 
     return result;
