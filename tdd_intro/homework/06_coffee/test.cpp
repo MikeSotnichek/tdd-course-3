@@ -40,7 +40,8 @@ enum Cup
 
 enum Coffee
 {
-    Americano
+    Americano,
+    Cappuccino
 };
 
 class MockSourceOfIngredients : public ISourceOfIngredients
@@ -71,9 +72,20 @@ public:
         {
             volume = 140;
         }
-        m_source.AddCoffee(volume / 4 * 3);
         m_source.SetCupSize(volume);
-        m_source.AddWater(volume / 4, 60);
+
+        if (coffee == Coffee::Americano)
+        {
+            m_source.AddCoffee(volume / 4 * 3);
+            m_source.AddWater(volume / 4, 60);
+        }
+        if (coffee == Coffee::Cappuccino)
+        {
+            m_source.AddCoffee(volume / 3);
+            m_source.AddMilk(volume / 3);
+            m_source.AddMilkFoam(volume / 3);
+            m_source.AddWater(1, 80);
+        }
     }
 private:
     ISourceOfIngredients& m_source;
