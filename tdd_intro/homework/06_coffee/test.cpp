@@ -99,18 +99,6 @@ TEST(CoffeeMachine, CoffemachineIsHere)
     CoffeeMachine cm(si);
 }
 
-TEST(CoffeeMachine, CallsImportantThings)
-{
-    MockSourceOfIngredients si;
-    CoffeeMachine cm(si);
-
-    EXPECT_CALL(si, AddCoffee(::testing::_)).Times(1);
-    EXPECT_CALL(si, SetCupSize(::testing::_)).Times(1);
-    EXPECT_CALL(si, AddWater(::testing::_, ::testing::_)).Times(1);
-
-    cm.CreateCoffee(Cup::Normal, Coffee::Americano);
-}
-
 //- americano: water & coffee 1:3 Water temp 60C
 TEST(CoffeeMachine, Americano)
 {
