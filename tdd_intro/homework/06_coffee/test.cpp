@@ -65,9 +65,18 @@ public:
     }
     void CreateCoffee(const Cup cup, const Coffee coffee)
     {
-        m_source.AddCoffee(75);
-        m_source.SetCupSize(100);
-        m_source.AddWater(25, 60);
+        if (cup == Cup::Normal)
+        {
+            m_source.AddCoffee(75);
+            m_source.SetCupSize(100);
+            m_source.AddWater(25, 60);
+        }
+        else
+        {
+            m_source.AddCoffee(105);
+            m_source.SetCupSize(140);
+            m_source.AddWater(35, 60);
+        }
     }
 private:
     ISourceOfIngredients& m_source;
@@ -129,5 +138,5 @@ TEST(CoffeeMachine, AmericanoLargeCup)
     EXPECT_CALL(si, SetCupSize(140)).Times(1);
     EXPECT_CALL(si, AddWater(35, 60)).Times(1);
 
-    cm.CreateCoffee(Cup::Large, Coffee::Americano);
+    cm.CreateCoffee(Cup::Big, Coffee::Americano);
 }
