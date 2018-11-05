@@ -65,18 +65,15 @@ public:
     }
     void CreateCoffee(const Cup cup, const Coffee coffee)
     {
-        if (cup == Cup::Normal)
+        int volume = 100;
+
+        if (cup == Cup::Big)
         {
-            m_source.AddCoffee(75);
-            m_source.SetCupSize(100);
-            m_source.AddWater(25, 60);
+            volume = 140;
         }
-        else
-        {
-            m_source.AddCoffee(105);
-            m_source.SetCupSize(140);
-            m_source.AddWater(35, 60);
-        }
+        m_source.AddCoffee(volume / 4 * 3);
+        m_source.SetCupSize(volume);
+        m_source.AddWater(volume / 4, 60);
     }
 private:
     ISourceOfIngredients& m_source;
