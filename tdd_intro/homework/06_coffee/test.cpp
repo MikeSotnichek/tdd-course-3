@@ -208,3 +208,33 @@ TEST(CoffeeMachine, LatteSmallCup)
 
     cm.CreateCoffee(Cup::Normal, Coffee::Latte);
 }
+
+//- big 140 gram
+//- latte - milk & coffee & milk foam 1:4, 1:2, 1:4. Water temp 90C
+TEST(CoffeeMachine, LatteLargeCup)
+{
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(140)).Times(1);
+    EXPECT_CALL(si, AddCoffee(70)).Times(1);
+    EXPECT_CALL(si, AddMilk(35)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(35)).Times(1);
+    EXPECT_CALL(si, AddWater(0, 90)).Times(1); //no room for water :( set temperature anyway
+
+    cm.CreateCoffee(Cup::Big, Coffee::Latte);
+}
+
+//- marochino - chocolate & coffee & milk foam, 1:4, 1:4, 1:4 and 1:4 is empty
+TEST(CoffeeMachine, MarochinoSmallCup)
+{
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(100)).Times(1);
+    EXPECT_CALL(si, AddCoffee(25)).Times(1);
+    EXPECT_CALL(si, AddChocolate(35)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(25)).Times(1);
+
+    cm.CreateCoffee(Cup::Normal, Coffee::Marochino);
+}
