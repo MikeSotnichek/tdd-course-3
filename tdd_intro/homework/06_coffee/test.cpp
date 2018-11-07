@@ -42,7 +42,8 @@ enum Coffee
 {
     Americano,
     Cappuccino,
-    Latte
+    Latte,
+    Marochino
 };
 
 class MockSourceOfIngredients : public ISourceOfIngredients
@@ -86,6 +87,9 @@ public:
         case Latte:
             latteRecepie(volume);
             break;
+        case Marochino:
+            marochinoRecepie(volume);
+            break;
         }
     }
 
@@ -110,6 +114,13 @@ private:
         m_source.AddMilk(volume / 4);
         m_source.AddMilkFoam(volume / 4);
         m_source.AddWater(0, 90);
+    }
+
+    void marochinoRecepie(int volume)
+    {
+        m_source.AddCoffee(volume / 4);
+        m_source.AddChocolate(volume / 4);
+        m_source.AddMilkFoam(volume / 4);
     }
 
 private:
@@ -233,7 +244,7 @@ TEST(CoffeeMachine, MarochinoSmallCup)
 
     EXPECT_CALL(si, SetCupSize(100)).Times(1);
     EXPECT_CALL(si, AddCoffee(25)).Times(1);
-    EXPECT_CALL(si, AddChocolate(35)).Times(1);
+    EXPECT_CALL(si, AddChocolate(25)).Times(1);
     EXPECT_CALL(si, AddMilkFoam(25)).Times(1);
 
     cm.CreateCoffee(Cup::Normal, Coffee::Marochino);
