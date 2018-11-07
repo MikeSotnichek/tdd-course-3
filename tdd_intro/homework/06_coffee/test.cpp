@@ -41,7 +41,8 @@ enum Cup
 enum Coffee
 {
     Americano,
-    Cappuccino
+    Cappuccino,
+    Latte
 };
 
 class MockSourceOfIngredients : public ISourceOfIngredients
@@ -82,6 +83,9 @@ public:
         case Cappuccino:
             cappuccinoRecepie(volume);
             break;
+        case Latte:
+            latteRecepie(volume);
+            break;
         }
     }
 
@@ -98,6 +102,13 @@ private:
         m_source.AddMilk(volume / 3);
         m_source.AddMilkFoam(volume / 3);
         m_source.AddWater(volume - int(volume / 3) * 3, 80);
+    }
+
+    void latteRecepie(int volume)
+    {
+        m_source.AddCoffee(volume / 2);
+        m_source.AddMilk(volume / 4);
+        m_source.AddMilkFoam(volume / 4);
     }
 
 private:
