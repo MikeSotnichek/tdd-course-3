@@ -66,7 +66,8 @@ public:
     {
 
     }
-    void CreateCoffee(const Cup cup, const Coffee coffee)
+
+    void CreateCoffee(const Cup cup, const Coffee coffee) const
     {
         int volume = cup == Cup::Big ? 140 : 100;
         m_source.SetCupSize(volume);
@@ -88,13 +89,13 @@ public:
     }
 
 private:
-    void americanoRecepie(int volume)
+    void americanoRecepie(int volume) const
     {
         m_source.AddCoffee(volume / 4 * 3);
         m_source.AddWater(volume / 4, 60);
     }
 
-    void cappuccinoRecepie(int volume)
+    void cappuccinoRecepie(int volume) const
     {
         m_source.AddCoffee(volume / 3);
         m_source.AddMilk(volume / 3);
@@ -102,7 +103,7 @@ private:
         m_source.AddWater(volume - int(volume / 3) * 3, 80);
     }
 
-    void latteRecepie(int volume)
+    void latteRecepie(int volume) const
     {
         m_source.AddCoffee(volume / 2);
         m_source.AddMilk(volume / 4);
@@ -110,7 +111,7 @@ private:
         m_source.AddWater(0, 90);
     }
 
-    void marochinoRecepie(int volume)
+    void marochinoRecepie(int volume) const
     {
         m_source.AddCoffee(volume / 4);
         m_source.AddChocolate(volume / 4);
@@ -120,7 +121,6 @@ private:
 private:
     ISourceOfIngredients& m_source;
 };
-
 
 // Architecture
 // Class CoffeMachine
@@ -134,19 +134,18 @@ private:
 // 3. AddCoffee, SetCupSize and AddWater calls once
 // 4. Check parameters
 // 5. Same for each recipe
+class CoffeeMachineTest : public ::testing::Test {
+protected:
+    CoffeeMachineTest() : cm(si) {}
 
-TEST(CoffeeMachine, CoffemachineIsHere)
-{
-    MockSourceOfIngredients si;
-    CoffeeMachine cm(si);
-}
+    ::testing::StrictMock<MockSourceOfIngredients> si;
+    const CoffeeMachine cm;
+};
+
 
 //- americano: water & coffee 1:3 Water temp 60C
-TEST(CoffeeMachine, Americano)
+TEST_F(CoffeeMachineTest, Americano)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, AddCoffee(75)).Times(1);
     EXPECT_CALL(si, SetCupSize(100)).Times(1);
     EXPECT_CALL(si, AddWater(25, 60)).Times(1);
@@ -156,11 +155,8 @@ TEST(CoffeeMachine, Americano)
 
 //- big 140 gram
 //- americano: water & coffee 1:3 Water temp 60C
-TEST(CoffeeMachine, AmericanoLargeCup)
+TEST_F(CoffeeMachineTest, AmericanoLargeCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, AddCoffee(105)).Times(1);
     EXPECT_CALL(si, SetCupSize(140)).Times(1);
     EXPECT_CALL(si, AddWater(35, 60)).Times(1);
@@ -169,11 +165,8 @@ TEST(CoffeeMachine, AmericanoLargeCup)
 }
 
 //- cappuccino - milk & coffee & milk foam 1:3, 1:3, 1:3. Water temp 80C
-TEST(CoffeeMachine, CappuccinoSmallCup)
+TEST_F(CoffeeMachineTest, CappuccinoSmallCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, SetCupSize(100)).Times(1);
     EXPECT_CALL(si, AddCoffee(33)).Times(1);
     EXPECT_CALL(si, AddMilk(33)).Times(1);
@@ -185,11 +178,8 @@ TEST(CoffeeMachine, CappuccinoSmallCup)
 
 //- big 140 gram
 //- cappuccino - milk & coffee & milk foam 1:3, 1:3, 1:3. Water temp 80C
-TEST(CoffeeMachine, CappuccinoLargeCup)
+TEST_F(CoffeeMachineTest, CappuccinoLargeCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, SetCupSize(140)).Times(1);
     EXPECT_CALL(si, AddCoffee(46)).Times(1);
     EXPECT_CALL(si, AddMilk(46)).Times(1);
@@ -200,11 +190,8 @@ TEST(CoffeeMachine, CappuccinoLargeCup)
 }
 
 //- latte - milk & coffee & milk foam 1:4, 1:2, 1:4. Water temp 90C
-TEST(CoffeeMachine, LatteSmallCup)
+TEST_F(CoffeeMachineTest, LatteSmallCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, SetCupSize(100)).Times(1);
     EXPECT_CALL(si, AddCoffee(50)).Times(1);
     EXPECT_CALL(si, AddMilk(25)).Times(1);
@@ -216,11 +203,8 @@ TEST(CoffeeMachine, LatteSmallCup)
 
 //- big 140 gram
 //- latte - milk & coffee & milk foam 1:4, 1:2, 1:4. Water temp 90C
-TEST(CoffeeMachine, LatteLargeCup)
+TEST_F(CoffeeMachineTest, LatteLargeCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, SetCupSize(140)).Times(1);
     EXPECT_CALL(si, AddCoffee(70)).Times(1);
     EXPECT_CALL(si, AddMilk(35)).Times(1);
@@ -231,11 +215,8 @@ TEST(CoffeeMachine, LatteLargeCup)
 }
 
 //- marochino - chocolate & coffee & milk foam, 1:4, 1:4, 1:4 and 1:4 is empty
-TEST(CoffeeMachine, MarochinoSmallCup)
+TEST_F(CoffeeMachineTest, MarochinoSmallCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, SetCupSize(100)).Times(1);
     EXPECT_CALL(si, AddCoffee(25)).Times(1);
     EXPECT_CALL(si, AddChocolate(25)).Times(1);
@@ -246,11 +227,8 @@ TEST(CoffeeMachine, MarochinoSmallCup)
 
 //- big 140 gram
 //- marochino - chocolate & coffee & milk foam, 1:4, 1:4, 1:4 and 1:4 is empty
-TEST(CoffeeMachine, MarochinoLargeCup)
+TEST_F(CoffeeMachineTest, MarochinoLargeCup)
 {
-    ::testing::StrictMock<MockSourceOfIngredients> si;
-    CoffeeMachine cm(si);
-
     EXPECT_CALL(si, SetCupSize(140)).Times(1);
     EXPECT_CALL(si, AddCoffee(35)).Times(1);
     EXPECT_CALL(si, AddChocolate(35)).Times(1);
