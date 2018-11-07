@@ -203,7 +203,7 @@ TEST(CoffeeMachine, LatteSmallCup)
     EXPECT_CALL(si, AddCoffee(50)).Times(1);
     EXPECT_CALL(si, AddMilk(25)).Times(1);
     EXPECT_CALL(si, AddMilkFoam(25)).Times(1);
-    //no room for water :(
+    EXPECT_CALL(si, AddWater(0, 90)).Times(1); //no room for water :( set temperature anyway
 
     cm.CreateCoffee(Cup::Normal, Coffee::Latte);
 }
