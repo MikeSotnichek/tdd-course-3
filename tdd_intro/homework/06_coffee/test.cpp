@@ -243,3 +243,18 @@ TEST(CoffeeMachine, MarochinoSmallCup)
 
     cm.CreateCoffee(Cup::Normal, Coffee::Marochino);
 }
+
+//- big 140 gram
+//- marochino - chocolate & coffee & milk foam, 1:4, 1:4, 1:4 and 1:4 is empty
+TEST(CoffeeMachine, MarochinoLargeCup)
+{
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(140)).Times(1);
+    EXPECT_CALL(si, AddCoffee(35)).Times(1);
+    EXPECT_CALL(si, AddChocolate(35)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(35)).Times(1);
+
+    cm.CreateCoffee(Cup::Big, Coffee::Marochino);
+}
