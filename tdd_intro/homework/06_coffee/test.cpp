@@ -97,7 +97,7 @@ private:
         m_source.AddCoffee(volume / 3);
         m_source.AddMilk(volume / 3);
         m_source.AddMilkFoam(volume / 3);
-        m_source.AddWater(1, 80);
+        m_source.AddWater(volume - int(volume / 3) * 3, 80);
     }
 
 private:
@@ -179,5 +179,5 @@ TEST(CoffeeMachine, CappuccinoLargeCup)
     EXPECT_CALL(si, AddMilkFoam(46)).Times(1);
     EXPECT_CALL(si, AddWater(2, 80)).Times(1);
 
-    cm.CreateCoffee(Cup::Normal, Coffee::Cappuccino);
+    cm.CreateCoffee(Cup::Big, Coffee::Cappuccino);
 }
