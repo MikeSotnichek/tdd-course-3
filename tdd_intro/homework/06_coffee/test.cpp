@@ -72,21 +72,34 @@ public:
         {
             volume = 140;
         }
+
         m_source.SetCupSize(volume);
 
-        if (coffee == Coffee::Americano)
-        {
-            m_source.AddCoffee(volume / 4 * 3);
-            m_source.AddWater(volume / 4, 60);
-        }
-        if (coffee == Coffee::Cappuccino)
-        {
-            m_source.AddCoffee(volume / 3);
-            m_source.AddMilk(volume / 3);
-            m_source.AddMilkFoam(volume / 3);
-            m_source.AddWater(1, 80);
+        switch (coffee) {
+        case Americano:
+            americanoRecepie(volume);
+            break;
+        case Cappuccino:
+            cappuccinoRecepie(volume);
+            break;
         }
     }
+
+private:
+    void americanoRecepie(int volume)
+    {
+        m_source.AddCoffee(volume / 4 * 3);
+        m_source.AddWater(volume / 4, 60);
+    }
+
+    void cappuccinoRecepie(int volume)
+    {
+        m_source.AddCoffee(volume / 3);
+        m_source.AddMilk(volume / 3);
+        m_source.AddMilkFoam(volume / 3);
+        m_source.AddWater(1, 80);
+    }
+
 private:
     ISourceOfIngredients& m_source;
 };
