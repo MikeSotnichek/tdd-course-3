@@ -115,7 +115,6 @@ private:
         m_source.AddCoffee(volume / 4);
         m_source.AddChocolate(volume / 4);
         m_source.AddMilkFoam(volume / 4);
-        m_source.AddMilk(50);
     }
 
 private:
