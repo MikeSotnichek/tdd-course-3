@@ -68,13 +68,7 @@ public:
     }
     void CreateCoffee(const Cup cup, const Coffee coffee)
     {
-        int volume = 100;
-
-        if (cup == Cup::Big)
-        {
-            volume = 140;
-        }
-
+        int volume = cup == Cup::Big ? 140 : 100;
         m_source.SetCupSize(volume);
 
         switch (coffee) {
