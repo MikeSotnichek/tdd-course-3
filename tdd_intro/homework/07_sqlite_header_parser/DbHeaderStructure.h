@@ -53,4 +53,4 @@ struct DbHeader {
     SchemaFormat schemaFormat;
 };
 
-void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader);
+void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader);

@@ -89,25 +89,25 @@ void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
     EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
 }
 
-TEST(DysplayHeaderStructure, OpensDb) {
+TEST(DisplayHeaderStructure, OpensDb) {
     MockDbReader reader;
     MockGui gui;
 
     EXPECT_CALL(reader, OpenDb());
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ReadsDataFromFile) {
+TEST(DisplayHeaderStructure, ReadsDataFromFile) {
     MockDbReader reader;
     MockGui gui;
 
     EXPECT_CALL(reader, Read(s_dbHeaderSize, _));
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, AcceptsValidHeaders) {
+TEST(DisplayHeaderStructure, AcceptsValidHeaders) {
     MockDbReader reader;
     MockGui gui;
 
@@ -116,10 +116,10 @@ TEST(DysplayHeaderStructure, AcceptsValidHeaders) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
+    EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
+TEST(DisplayHeaderStructure, ChecksInvalidDataHeader) {
     MockDbReader reader;
     MockGui gui;
 
@@ -129,10 +129,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
+TEST(DisplayHeaderStructure, ChecksInvalidPageSize) {
     MockDbReader reader;
     MockGui gui;
 
@@ -142,10 +142,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidPageSize0) {
+TEST(DisplayHeaderStructure, ChecksInvalidPageSize0) {
     MockDbReader reader;
     MockGui gui;
 
@@ -155,10 +155,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidPageSize0) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
+TEST(DisplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
     MockDbReader reader;
     MockGui gui;
 
@@ -168,10 +168,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
+TEST(DisplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
     MockDbReader reader;
     MockGui gui;
 
@@ -181,10 +181,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidPayloadMinFraction) {
+TEST(DisplayHeaderStructure, ChecksInvalidPayloadMinFraction) {
     MockDbReader reader;
     MockGui gui;
 
@@ -194,10 +194,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidPayloadMinFraction) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidPayloadMaxFraction) {
+TEST(DisplayHeaderStructure, ChecksInvalidPayloadMaxFraction) {
     MockDbReader reader;
     MockGui gui;
 
@@ -207,10 +207,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidPayloadMaxFraction) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidPayloadLeafFraction) {
+TEST(DisplayHeaderStructure, ChecksInvalidPayloadLeafFraction) {
     MockDbReader reader;
     MockGui gui;
 
@@ -220,11 +220,10 @@ TEST(DysplayHeaderStructure, ChecksInvalidPayloadLeafFraction) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-
-TEST(DysplayHeaderStructure, ChecksInvalidSchemaFormat) {
+TEST(DisplayHeaderStructure, ChecksInvalidSchemaFormat) {
     MockDbReader reader;
     MockGui gui;
 
@@ -234,5 +233,5 @@ TEST(DysplayHeaderStructure, ChecksInvalidSchemaFormat) {
 
     ExpectHeaderRead(expected, reader);
 
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }

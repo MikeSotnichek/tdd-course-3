@@ -62,7 +62,7 @@ namespace
     }
 }
 
-void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
+void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
     if (dbReader == nullptr)
     {
