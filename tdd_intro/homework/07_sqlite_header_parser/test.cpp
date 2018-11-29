@@ -71,7 +71,7 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     }
 
     DbHeader* parsed = (DbHeader*) rawData;
-    if ((parsed->pageSize & (parsed->pageSize - 1)) != 0 && parsed->pageSize != 1)
+    if (((parsed->pageSize & (parsed->pageSize - 1)) != 0 && parsed->pageSize != 1) || parsed->pageSize == 0)
     {
         throw std::runtime_error("Invalid page size.");
     }
