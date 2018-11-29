@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <cstddef>
 #include <cstdint>
 
@@ -7,6 +8,7 @@ class IGui
 public:
     ~IGui(){}
     //Add here necessary methods
+    virtual void Write(const std::string& message) = 0;
 };
 
 class IDbReader

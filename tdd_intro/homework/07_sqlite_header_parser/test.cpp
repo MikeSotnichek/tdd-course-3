@@ -18,8 +18,8 @@ Sqlite header is described here https://www.sqlite.org/fileformat.html
  * Minimum embedded payload fraction. Must be 32.
  * Leaf payload fraction. Must be 32.
  * The schema format number. Supported schema formats are 1, 2, 3, and 4.
- *
  * The database text encoding. A value of 1 means UTF-8. A value of 2 means UTF-16le. A value of 3 means UTF-16be.
+ *
  * 3. Output to display
  * Prints values - a test for each of:
         The database page size in bytes.
@@ -66,7 +66,8 @@ public:
 };
 
 class MockGui : public IGui {
-
+public:
+    MOCK_METHOD1(Write, void(const std::string&));
 };
 
 // Helper functions for tests
@@ -248,4 +249,21 @@ TEST(DisplayHeaderStructure, ChecksInvalidEncoding) {
     ExpectHeaderRead(expected, reader);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DisplayHeaderStructure, PrintsPageSize) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+
+    ExpectHeaderRead(expected, reader);
+
+    std::stringstream expectedMessage;
+    expectedMessage << "Page size: ";
+    expectedMessage << expected.pageSize;
+    EXPECT_CALL(gui, Write(expectedMessage.str()));
+
+    EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
 }
