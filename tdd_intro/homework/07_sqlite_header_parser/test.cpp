@@ -133,7 +133,7 @@ TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
 
     char readerData[]{"Invalid header"};
 
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*readerData), Return(sizeof(readerData))));
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
 
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -142,16 +142,7 @@ TEST(DysplayHeaderStructure, ChecksValidDataHeader) {
     MockDbReader reader;
     MockGui gui;
 
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*s_dbDataHeader), Return(sizeof(s_dbDataHeader))));
-
-    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
-}
-
-TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
-    MockDbReader reader;
-    MockGui gui;
-
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*s_dbDataHeader), Return(sizeof(s_dbDataHeader))));
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(s_dbDataHeader, s_dbDataHeader + sizeof(s_dbDataHeader)), Return(sizeof(s_dbDataHeader))));
 
     EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
 }
