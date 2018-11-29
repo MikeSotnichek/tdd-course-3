@@ -47,7 +47,6 @@ struct DbHeader {
     uint16_t pageSize;
 };
 
-
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
     if (dbReader == nullptr)
@@ -125,6 +124,7 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 void PrepareValidExpectedHeader(DbHeader &expected){
     std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
     expected.pageSize = 1024;
+    expected.fileWriteFormatVersion = 2;
 }
 
 void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
@@ -197,6 +197,19 @@ TEST(DysplayHeaderStructure, ChecksInvalidPageSize0) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
     expected.pageSize = 0;
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    expected.fileWriteFormatVersion = 3;
 
     ExpectHeaderRead(expected, reader);
 
