@@ -59,6 +59,9 @@ namespace
 
         checkValueInEnum(header->schemaFormat,
                          "Invalid schema format.");
+
+        checkValueInEnum(header->encoding,
+                         "Invalid encoding.");
     }
 }
 
