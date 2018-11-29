@@ -77,7 +77,7 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     }
 
     if(parsed->fileWriteFormatVersion != 1 && parsed->fileWriteFormatVersion != 2){
-        throw std::runtime_error("Invalid page size.");
+        throw std::runtime_error("Invalid file write format version.");
     }
 }
 
