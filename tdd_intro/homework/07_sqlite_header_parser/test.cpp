@@ -40,13 +40,34 @@ class MockGui : public IGui {
 };
 
 const std::size_t s_dbHeaderSize = 100;
-
 const char s_dbDataHeader[]{"SQLite format 3"};
 struct DbHeader {
     char dataHeader[sizeof(s_dbDataHeader)];
     uint16_t pageSize;
     uint8_t fileWriteFormatVersion;
 };
+
+void checkValidHeader(DbHeader* header)
+{
+    assert(header != nullptr);
+
+    for (std::size_t i = 0; i < sizeof(s_dbDataHeader); ++i)
+    {
+        if (s_dbDataHeader[i] != header->dataHeader[i])
+        {
+            throw std::runtime_error("Invalid data header.");
+        }
+    }
+
+    if (((header->pageSize & (header->pageSize - 1)) != 0 && header->pageSize != 1) || header->pageSize == 0)
+    {
+        throw std::runtime_error("Invalid page size.");
+    }
+
+    if(header->fileWriteFormatVersion != 1 && header->fileWriteFormatVersion != 2){
+        throw std::runtime_error("Invalid file write format version.");
+    }
+}
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
@@ -63,21 +84,9 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     }
     DbHeader* parsed = (DbHeader*) rawData;
 
-    for (std::size_t i = 0; i < sizeof(s_dbDataHeader); ++i)
-    {
-        if (s_dbDataHeader[i] != parsed->dataHeader[i])
-        {
-            throw std::runtime_error("Invalid data header.");
-        }
-    }
-    if (((parsed->pageSize & (parsed->pageSize - 1)) != 0 && parsed->pageSize != 1) || parsed->pageSize == 0)
-    {
-        throw std::runtime_error("Invalid page size.");
-    }
+    checkValidHeader(parsed);
 
-    if(parsed->fileWriteFormatVersion != 1 && parsed->fileWriteFormatVersion != 2){
-        throw std::runtime_error("Invalid file write format version.");
-    }
+
 }
 
 /*
