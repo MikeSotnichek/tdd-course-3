@@ -69,7 +69,7 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
  * 1.0. Reads 100 bytes
  * 1.1. Checks header string
  * 1.2. Throw if header not valid
- * 2. Parse structure
+ * 2. Parse structure (throw if any check fails)
  * 2.1. Check page size power of two between 512 and 32768 inclusive, or the value 1 representing a page size of 65536
  * 2.2. Check file format version (1 or 2)
  * 2.3. More checks:
@@ -136,4 +136,22 @@ TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
     EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*readerData), Return(sizeof(readerData))));
 
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksValidDataHeader) {
+    MockDbReader reader;
+    MockGui gui;
+
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*s_dbDataHeader), Return(sizeof(s_dbDataHeader))));
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
+    MockDbReader reader;
+    MockGui gui;
+
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*s_dbDataHeader), Return(sizeof(s_dbDataHeader))));
+
+    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
 }
