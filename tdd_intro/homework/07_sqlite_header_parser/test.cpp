@@ -7,6 +7,9 @@ Sqlite header is described here https://www.sqlite.org/fileformat.html
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <exception>
+#include <vector>
+
+using namespace testing;
 
 class IGui
 {
@@ -21,6 +24,7 @@ public:
     ~IDbReader(){}
     //Add here necessary methods
     virtual void OpenDb() = 0;
+    virtual std::size_t Read(std::size_t n, char* dest) = 0;
 };
 
 // Mocks
@@ -28,6 +32,7 @@ public:
 class MockDbReader : public IDbReader {
 public:
     MOCK_METHOD0(OpenDb, void());
+    MOCK_METHOD2(Read, std::size_t(std::size_t, char*));
 };
 
 class MockGui : public IGui {
@@ -93,6 +98,15 @@ TEST(DysplayHeaderStructure, OpensDb) {
     MockGui gui;
 
     EXPECT_CALL(reader, OpenDb());
+
+    DysplayHeaderStructure(&gui, &reader);
+}
+
+TEST(DysplayHeaderStructure, ReadsDataFromFile) {
+    MockDbReader reader;
+    MockGui gui;
+
+    EXPECT_CALL(reader, Read(100, _));
 
     DysplayHeaderStructure(&gui, &reader);
 }
