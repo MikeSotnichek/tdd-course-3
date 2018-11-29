@@ -45,6 +45,7 @@ struct DbHeader {
     char dataHeader[sizeof(s_dbDataHeader)];
     uint16_t pageSize;
     uint8_t fileWriteFormatVersion;
+    uint8_t fileReadFormatVersion;
 };
 
 void checkValidHeader(DbHeader* header)
@@ -65,6 +66,10 @@ void checkValidHeader(DbHeader* header)
     }
 
     if(header->fileWriteFormatVersion != 1 && header->fileWriteFormatVersion != 2){
+        throw std::runtime_error("Invalid file write format version.");
+    }
+
+    if(header->fileReadFormatVersion != 1 && header->fileReadFormatVersion != 2){
         throw std::runtime_error("Invalid file write format version.");
     }
 }
@@ -136,6 +141,7 @@ void PrepareValidExpectedHeader(DbHeader &expected){
     std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
     expected.pageSize = 1024;
     expected.fileWriteFormatVersion = 2;
+    expected.fileReadFormatVersion = 2;
 }
 
 void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
@@ -227,7 +233,7 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
-TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
+TEST(DysplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
     MockDbReader reader;
     MockGui gui;
 
