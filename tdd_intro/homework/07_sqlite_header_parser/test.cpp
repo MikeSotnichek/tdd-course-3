@@ -122,6 +122,18 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
  *  3. parse sqlite version number display as "<Major>.<Minor>.<Release>"
  */
 
+void PrepareValidExpectedHeader(DbHeader &expected){
+    std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
+    expected.pageSize = 1024;
+}
+
+void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
+    char readerData[sizeof(DbHeader)];
+    std::memcpy(readerData, &expected, sizeof(DbHeader));
+
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
+}
+
 TEST(DysplayHeaderStructure, OpensDb) {
     MockDbReader reader;
     MockGui gui;
@@ -144,9 +156,11 @@ TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
     MockDbReader reader;
     MockGui gui;
 
-    char readerData[]{"Invalid header"};
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    std::strcpy(expected.dataHeader, "Invalid header");
 
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
+    ExpectHeaderRead(expected, reader);
 
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -156,13 +170,22 @@ TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
     MockGui gui;
 
     DbHeader expected;
-    std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
+    PrepareValidExpectedHeader(expected);
     expected.pageSize = 100;
 
-    char readerData[sizeof(DbHeader)];
-    std::memcpy(readerData, &expected, sizeof(DbHeader));
-
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
+    ExpectHeaderRead(expected, reader);
 
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksValidPageSizePowerOfTwo) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
 }
