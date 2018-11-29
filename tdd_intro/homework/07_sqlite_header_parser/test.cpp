@@ -146,3 +146,16 @@ TEST(DysplayHeaderStructure, ChecksValidDataHeader) {
 
     EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
 }
+
+TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    expected.DataHeader = s_dbDataHeader;
+    expected.PageSize = 100;
+
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(&expected, &expected + sizeof(DbHeader)), Return(sizeof(DbHeader))));
+
+    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
+}
