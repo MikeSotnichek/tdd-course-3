@@ -29,6 +29,7 @@ struct DbHeader {
     uint8_t payloadMaxFraction;
     uint8_t payloadMinFraction;
     uint8_t payloadLeafFraction;
+    uint16_t schemaFormat;
 };
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader);
