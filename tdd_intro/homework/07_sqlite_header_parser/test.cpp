@@ -40,6 +40,7 @@ class MockGui : public IGui {
 };
 
 const std::size_t s_dbHeaderSize = 100;
+const char s_dbDataHeader[]{"SQLite format 3\0"};
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
@@ -49,7 +50,18 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     }
     dbReader->OpenDb();
     char rawData[s_dbHeaderSize];
-    dbReader->Read(s_dbHeaderSize, rawData);
+    const std::size_t readSize = dbReader->Read(s_dbHeaderSize, rawData);
+    if (readSize < sizeof(s_dbDataHeader))
+    {
+        throw std::runtime_error("Cannot parse data header from file.");
+    }
+    for (std::size_t i = 0; i < sizeof(s_dbDataHeader); ++i)
+    {
+        if (s_dbDataHeader[i] != rawData[i])
+        {
+            throw std::runtime_error("Invalid data header.");
+        }
+    }
 }
 
 /*
@@ -103,7 +115,7 @@ TEST(DysplayHeaderStructure, OpensDb) {
 
     EXPECT_CALL(reader, OpenDb());
 
-    DysplayHeaderStructure(&gui, &reader);
+     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
 TEST(DysplayHeaderStructure, ReadsDataFromFile) {
@@ -112,7 +124,7 @@ TEST(DysplayHeaderStructure, ReadsDataFromFile) {
 
     EXPECT_CALL(reader, Read(s_dbHeaderSize, _));
 
-    DysplayHeaderStructure(&gui, &reader);
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
 TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
