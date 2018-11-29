@@ -36,6 +36,10 @@ namespace
         if(header->payloadMaxFraction != 64){
             throw std::runtime_error("Invalid payloadMaxFraction.");
         }
+
+        if(header->payloadLeafFraction != 32){
+            throw std::runtime_error("Invalid payloadLeafFraction.");
+        }
     }
 }
 
