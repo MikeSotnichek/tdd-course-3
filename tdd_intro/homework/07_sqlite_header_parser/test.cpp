@@ -6,6 +6,7 @@ Sqlite header is described here https://www.sqlite.org/fileformat.html
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <exception>
 
 class IGui
 {
@@ -19,21 +20,27 @@ class IDbReader
 public:
     ~IDbReader(){}
     //Add here necessary methods
+    virtual void OpenDb() = 0;
 };
 
 // Mocks
 
-class MockDbReader : IDbReader {
-
+class MockDbReader : public IDbReader {
+public:
+    MOCK_METHOD0(OpenDb, void());
 };
 
-class MockGui : IGui {
+class MockGui : public IGui {
 
 };
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
-
+    if (dbReader == nullptr)
+    {
+        throw std::runtime_error("dbReader not initialized");
+    }
+    dbReader->OpenDb();
 }
 
 /*
