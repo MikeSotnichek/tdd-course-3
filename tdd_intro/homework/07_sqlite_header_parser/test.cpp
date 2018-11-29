@@ -140,7 +140,7 @@ TEST(DysplayHeaderStructure, OpensDb) {
 
     EXPECT_CALL(reader, OpenDb());
 
-     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
 TEST(DysplayHeaderStructure, ReadsDataFromFile) {
@@ -188,4 +188,17 @@ TEST(DysplayHeaderStructure, ChecksValidPageSizePowerOfTwo) {
     ExpectHeaderRead(expected, reader);
 
     EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
+}
+
+TEST(DysplayHeaderStructure, ChecksInvalidPageSize0) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    expected.pageSize = 0;
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
