@@ -75,6 +75,7 @@ void PrepareValidExpectedHeader(DbHeader &expected){
     expected.pageSize = 1024;
     expected.fileWriteFormatVersion = 2;
     expected.fileReadFormatVersion = 2;
+    expected.payloadMaxFraction = 64;
     expected.payloadMinFraction = 32;
 }
 
@@ -187,6 +188,19 @@ TEST(DysplayHeaderStructure, ChecksInvalidPayloadMinFraction) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
     expected.payloadMinFraction = 0;
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksInvalidPayloadMaxFraction) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    expected.payloadMaxFraction = 0;
 
     ExpectHeaderRead(expected, reader);
 

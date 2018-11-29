@@ -26,6 +26,7 @@ struct DbHeader {
     uint16_t pageSize;
     uint8_t fileWriteFormatVersion;
     uint8_t fileReadFormatVersion;
+    uint8_t payloadMaxFraction;
     uint8_t payloadMinFraction;
 };
 
