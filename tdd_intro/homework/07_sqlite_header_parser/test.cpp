@@ -114,3 +114,14 @@ TEST(DysplayHeaderStructure, ReadsDataFromFile) {
 
     DysplayHeaderStructure(&gui, &reader);
 }
+
+TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
+    MockDbReader reader;
+    MockGui gui;
+
+    char readerData[]{"Invalid header"};
+
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArgumentPointee<1>(*readerData), Return(sizeof(readerData))));
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
