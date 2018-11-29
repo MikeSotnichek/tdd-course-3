@@ -40,7 +40,13 @@ class MockGui : public IGui {
 };
 
 const std::size_t s_dbHeaderSize = 100;
-const char s_dbDataHeader[]{"SQLite format 3\0"};
+
+const char s_dbDataHeader[]{"SQLite format 3"};
+struct DbHeader {
+    char dataHeader[sizeof(s_dbDataHeader)];
+    uint16_t pageSize;
+};
+
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
@@ -152,10 +158,13 @@ TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
     MockGui gui;
 
     DbHeader expected;
-    expected.DataHeader = s_dbDataHeader;
-    expected.PageSize = 100;
+    std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
+    expected.pageSize = 100;
 
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(&expected, &expected + sizeof(DbHeader)), Return(sizeof(DbHeader))));
+    char readerData[sizeof(DbHeader)];
+    std::memcpy(readerData, &expected, sizeof(DbHeader));
 
-    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
