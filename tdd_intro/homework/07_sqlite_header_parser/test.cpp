@@ -85,8 +85,6 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     DbHeader* parsed = (DbHeader*) rawData;
 
     checkValidHeader(parsed);
-
-
 }
 
 /*
@@ -223,6 +221,19 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
     expected.fileWriteFormatVersion = 3;
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    expected.fileReadFormatVersion = 3;
 
     ExpectHeaderRead(expected, reader);
 
