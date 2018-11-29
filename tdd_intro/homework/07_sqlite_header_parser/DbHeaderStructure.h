@@ -35,11 +35,20 @@ enum class ReadWriteFormat : uint8_t {
 enum class SchemaFormat : uint16_t {
     Undefined = 0,
     First = 1,
-    FormatOne = ReadWriteFormat::First,
+    FormatOne = SchemaFormat::First,
     FormatTwo,
     FormatThree,
     FormatFour,
     Last = SchemaFormat::FormatFour
+};
+
+enum class Encoding : uint16_t {
+    Undefined = 0,
+    First = 1,
+    UTF8 = Encoding::First,
+    UTF16Le,
+    UTF16Be,
+    Last = Encoding::UTF16Be
 };
 
 struct DbHeader {
@@ -51,6 +60,7 @@ struct DbHeader {
     uint8_t payloadMinFraction;
     uint8_t payloadLeafFraction;
     SchemaFormat schemaFormat;
+    Encoding encoding;
 };
 
 void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader);

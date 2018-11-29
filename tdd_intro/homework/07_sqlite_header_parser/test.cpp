@@ -17,8 +17,8 @@ Sqlite header is described here https://www.sqlite.org/fileformat.html
  * Maximum embedded payload fraction. Must be 64.
  * Minimum embedded payload fraction. Must be 32.
  * Leaf payload fraction. Must be 32.
- *
  * The schema format number. Supported schema formats are 1, 2, 3, and 4.
+ *
  * The database text encoding. A value of 1 means UTF-8. A value of 2 means UTF-16le. A value of 3 means UTF-16be.
  * 3. Output to display
  * Prints values - a test for each of:
@@ -80,6 +80,7 @@ void PrepareValidExpectedHeader(DbHeader &expected){
     expected.payloadMinFraction = 32;
     expected.payloadLeafFraction = 32;
     expected.schemaFormat = SchemaFormat::FormatOne;
+    expected.encoding = Encoding::UTF8;
 }
 
 void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
@@ -230,6 +231,19 @@ TEST(DisplayHeaderStructure, ChecksInvalidSchemaFormat) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
     expected.schemaFormat = SchemaFormat::Undefined;
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DisplayHeaderStructure, ChecksInvalidEncoding) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    expected.encoding = Encoding::Undefined;
 
     ExpectHeaderRead(expected, reader);
 
