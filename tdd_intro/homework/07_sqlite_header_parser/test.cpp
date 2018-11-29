@@ -57,20 +57,19 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     dbReader->OpenDb();
     char rawData[s_dbHeaderSize];
     const std::size_t readSize = dbReader->Read(s_dbHeaderSize, rawData);
-    if (readSize < sizeof(s_dbDataHeader))
+    if (readSize < sizeof(DbHeader))
     {
         throw std::runtime_error("Cannot parse data header from file.");
     }
+    DbHeader* parsed = (DbHeader*) rawData;
 
     for (std::size_t i = 0; i < sizeof(s_dbDataHeader); ++i)
     {
-        if (s_dbDataHeader[i] != rawData[i])
+        if (s_dbDataHeader[i] != parsed->dataHeader[i])
         {
             throw std::runtime_error("Invalid data header.");
         }
     }
-
-    DbHeader* parsed = (DbHeader*) rawData;
     if (((parsed->pageSize & (parsed->pageSize - 1)) != 0 && parsed->pageSize != 1) || parsed->pageSize == 0)
     {
         throw std::runtime_error("Invalid page size.");
