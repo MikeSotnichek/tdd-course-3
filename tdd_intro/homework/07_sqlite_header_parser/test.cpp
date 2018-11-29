@@ -39,15 +39,17 @@ class MockGui : public IGui {
 
 };
 
+const std::size_t s_dbHeaderSize = 100;
+
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 {
     if (dbReader == nullptr)
     {
         throw std::runtime_error("dbReader not initialized");
-    }[]
+    }
     dbReader->OpenDb();
-    char rawData[100];
-    dbReader->Read(100, rawData);
+    char rawData[s_dbHeaderSize];
+    dbReader->Read(s_dbHeaderSize, rawData);
 }
 
 /*
@@ -108,7 +110,7 @@ TEST(DysplayHeaderStructure, ReadsDataFromFile) {
     MockDbReader reader;
     MockGui gui;
 
-    EXPECT_CALL(reader, Read(100, _));
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _));
 
     DysplayHeaderStructure(&gui, &reader);
 }
