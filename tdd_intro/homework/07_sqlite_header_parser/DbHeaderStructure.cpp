@@ -40,6 +40,10 @@ namespace
         if(header->payloadLeafFraction != 32){
             throw std::runtime_error("Invalid payloadLeafFraction.");
         }
+
+        if(header->schemaFormat < 1 || header->schemaFormat > 4){
+            throw std::runtime_error("Invalid schemaFormat.");
+        }
     }
 }
 
