@@ -157,6 +157,18 @@ TEST(DysplayHeaderStructure, ReadsDataFromFile) {
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
 
+TEST(DysplayHeaderStructure, AcceptsValidHeaders) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
+}
+
 TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
     MockDbReader reader;
     MockGui gui;
@@ -181,18 +193,6 @@ TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
     ExpectHeaderRead(expected, reader);
 
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
-}
-
-TEST(DysplayHeaderStructure, ChecksValidPageSizePowerOfTwo) {
-    MockDbReader reader;
-    MockGui gui;
-
-    DbHeader expected;
-    PrepareValidExpectedHeader(expected);
-
-    ExpectHeaderRead(expected, reader);
-
-    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
 }
 
 TEST(DysplayHeaderStructure, ChecksInvalidPageSize0) {
