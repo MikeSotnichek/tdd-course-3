@@ -26,11 +26,15 @@ namespace
         }
 
         if(header->fileReadFormatVersion != 1 && header->fileReadFormatVersion != 2){
-            throw std::runtime_error("Invalid file write format version.");
+            throw std::runtime_error("Invalid file read format version.");
         }
 
         if(header->payloadMinFraction != 32){
             throw std::runtime_error("Invalid payloadMinFraction.");
+        }
+
+        if(header->payloadMaxFraction != 64){
+            throw std::runtime_error("Invalid payloadMaxFraction.");
         }
     }
 }

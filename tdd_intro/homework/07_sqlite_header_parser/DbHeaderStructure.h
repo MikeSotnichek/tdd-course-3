@@ -28,6 +28,7 @@ struct DbHeader {
     uint8_t fileReadFormatVersion;
     uint8_t payloadMaxFraction;
     uint8_t payloadMinFraction;
+    uint8_t payloadLeafFraction;
 };
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader);
