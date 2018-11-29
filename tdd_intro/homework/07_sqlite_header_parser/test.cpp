@@ -44,8 +44,10 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     if (dbReader == nullptr)
     {
         throw std::runtime_error("dbReader not initialized");
-    }
+    }[]
     dbReader->OpenDb();
+    char rawData[100];
+    dbReader->Read(100, rawData);
 }
 
 /*
