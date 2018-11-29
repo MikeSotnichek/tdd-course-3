@@ -4,93 +4,6 @@ Application takes path to file and displays header structure
 Sqlite header is described here https://www.sqlite.org/fileformat.html
 */
 
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-#include <exception>
-#include <vector>
-
-using namespace testing;
-
-class IGui
-{
-public:
-    ~IGui(){}
-    //Add here necessary methods
-};
-
-class IDbReader
-{
-public:
-    ~IDbReader(){}
-    //Add here necessary methods
-    virtual void OpenDb() = 0;
-    virtual std::size_t Read(std::size_t n, char* dest) = 0;
-};
-
-// Mocks
-
-class MockDbReader : public IDbReader {
-public:
-    MOCK_METHOD0(OpenDb, void());
-    MOCK_METHOD2(Read, std::size_t(std::size_t, char*));
-};
-
-class MockGui : public IGui {
-
-};
-
-const std::size_t s_dbHeaderSize = 100;
-const char s_dbDataHeader[]{"SQLite format 3"};
-struct DbHeader {
-    char dataHeader[sizeof(s_dbDataHeader)];
-    uint16_t pageSize;
-    uint8_t fileWriteFormatVersion;
-    uint8_t fileReadFormatVersion;
-};
-
-void checkValidHeader(DbHeader* header)
-{
-    assert(header != nullptr);
-
-    for (std::size_t i = 0; i < sizeof(s_dbDataHeader); ++i)
-    {
-        if (s_dbDataHeader[i] != header->dataHeader[i])
-        {
-            throw std::runtime_error("Invalid data header.");
-        }
-    }
-
-    if (((header->pageSize & (header->pageSize - 1)) != 0 && header->pageSize != 1) || header->pageSize == 0)
-    {
-        throw std::runtime_error("Invalid page size.");
-    }
-
-    if(header->fileWriteFormatVersion != 1 && header->fileWriteFormatVersion != 2){
-        throw std::runtime_error("Invalid file write format version.");
-    }
-
-    if(header->fileReadFormatVersion != 1 && header->fileReadFormatVersion != 2){
-        throw std::runtime_error("Invalid file write format version.");
-    }
-}
-
-void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
-{
-    if (dbReader == nullptr)
-    {
-        throw std::runtime_error("dbReader not initialized");
-    }
-    dbReader->OpenDb();
-    char rawData[s_dbHeaderSize];
-    const std::size_t readSize = dbReader->Read(s_dbHeaderSize, rawData);
-    if (readSize < sizeof(DbHeader))
-    {
-        throw std::runtime_error("Cannot parse data header from file.");
-    }
-    DbHeader* parsed = (DbHeader*) rawData;
-
-    checkValidHeader(parsed);
-}
 
 /*
  * 1. Open db
@@ -136,6 +49,26 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
  *  2. check magical pragma values https://www.sqlite.org/src/artifact?ci=trunk&filename=magic.txt and display correct strings instead of raw values
  *  3. parse sqlite version number display as "<Major>.<Minor>.<Release>"
  */
+
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+#include <DbHeaderStructure.h>
+
+using namespace testing;
+
+// Mocks
+
+class MockDbReader : public IDbReader {
+public:
+    MOCK_METHOD0(OpenDb, void());
+    MOCK_METHOD2(Read, std::size_t(std::size_t, char*));
+};
+
+class MockGui : public IGui {
+
+};
+
+// Helper functions for tests
 
 void PrepareValidExpectedHeader(DbHeader &expected){
     std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));

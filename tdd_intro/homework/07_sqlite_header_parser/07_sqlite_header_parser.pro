@@ -6,4 +6,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
+    test.cpp \
+    DbHeaderStructure.cpp
+
+HEADERS += \
+    DbHeaderStructure.h
