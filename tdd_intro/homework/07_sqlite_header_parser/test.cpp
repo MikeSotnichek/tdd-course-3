@@ -74,7 +74,8 @@ void PrepareValidExpectedHeader(DbHeader &expected){
     std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
     expected.pageSize = 1024;
     expected.fileWriteFormatVersion = 2;
-    expected.fileReadFormatVersion = 2;
+    expected.fileReadFormatVersion = 2;r
+    expected.payloadMinFraction = 32;
 }
 
 void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
@@ -173,6 +174,19 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
     expected.fileReadFormatVersion = 3;
+
+    ExpectHeaderRead(expected, reader);
+
+    EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
+}
+
+TEST(DysplayHeaderStructure, ChecksInvalidPayloadMinFraction) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+    expected.payloadMinFraction = 0;
 
     ExpectHeaderRead(expected, reader);
 
