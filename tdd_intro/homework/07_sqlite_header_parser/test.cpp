@@ -74,7 +74,7 @@ void PrepareValidExpectedHeader(DbHeader &expected){
     std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
     expected.pageSize = 1024;
     expected.fileWriteFormatVersion = 2;
-    expected.fileReadFormatVersion = 2;r
+    expected.fileReadFormatVersion = 2;
     expected.payloadMinFraction = 32;
 }
 
