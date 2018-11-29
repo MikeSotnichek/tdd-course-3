@@ -45,6 +45,7 @@ const char s_dbDataHeader[]{"SQLite format 3"};
 struct DbHeader {
     char dataHeader[sizeof(s_dbDataHeader)];
     uint16_t pageSize;
+    uint8_t fileWriteFormatVersion;
 };
 
 void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
@@ -72,6 +73,10 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     DbHeader* parsed = (DbHeader*) rawData;
     if (((parsed->pageSize & (parsed->pageSize - 1)) != 0 && parsed->pageSize != 1) || parsed->pageSize == 0)
     {
+        throw std::runtime_error("Invalid page size.");
+    }
+
+    if(parsed->fileWriteFormatVersion != 1 && parsed->fileWriteFormatVersion != 2){
         throw std::runtime_error("Invalid page size.");
     }
 }
