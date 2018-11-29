@@ -61,12 +61,19 @@ void DysplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     {
         throw std::runtime_error("Cannot parse data header from file.");
     }
+
     for (std::size_t i = 0; i < sizeof(s_dbDataHeader); ++i)
     {
         if (s_dbDataHeader[i] != rawData[i])
         {
             throw std::runtime_error("Invalid data header.");
         }
+    }
+
+    DbHeader* parsed = (DbHeader*) rawData;
+    if ((parsed->pageSize & (parsed->pageSize - 1)) != 0 && parsed->pageSize != 1)
+    {
+        throw std::runtime_error("Invalid page size.");
     }
 }
 
@@ -142,15 +149,6 @@ TEST(DysplayHeaderStructure, ChecksInvalidDataHeader) {
     EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
 
     EXPECT_THROW(DysplayHeaderStructure(&gui, &reader), std::runtime_error);
-}
-
-TEST(DysplayHeaderStructure, ChecksValidDataHeader) {
-    MockDbReader reader;
-    MockGui gui;
-
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(s_dbDataHeader, s_dbDataHeader + sizeof(s_dbDataHeader)), Return(sizeof(s_dbDataHeader))));
-
-    EXPECT_NO_THROW(DysplayHeaderStructure(&gui, &reader));
 }
 
 TEST(DysplayHeaderStructure, ChecksInvalidPageSize) {
