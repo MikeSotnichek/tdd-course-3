@@ -1,9 +1,27 @@
 #include "DbHeaderStructure.h"
 #include <stdexcept>
 #include <cassert>
+#include <iostream>
 
 namespace
 {
+    void checkNumberValue(unsigned int number, unsigned int expected, const std::string& message)
+    {
+        if (number != expected)
+        {
+            throw std::runtime_error(message);
+        }
+    }
+
+    template<typename ValueEnum>
+    void checkValueInEnum(ValueEnum number, const std::string& message)
+    {
+        if (number < ValueEnum::First || number > ValueEnum::Last)
+        {
+            throw std::runtime_error(message);
+        }
+    }
+
     void checkValidHeader(DbHeader* header)
     {
         assert(header != nullptr);
@@ -21,29 +39,26 @@ namespace
             throw std::runtime_error("Invalid page size.");
         }
 
-        if(header->fileWriteFormatVersion != 1 && header->fileWriteFormatVersion != 2){
-            throw std::runtime_error("Invalid file write format version.");
-        }
+        checkValueInEnum(header->fileWriteFormatVersion,
+                         "Invalid file write format version.");
 
-        if(header->fileReadFormatVersion != 1 && header->fileReadFormatVersion != 2){
-            throw std::runtime_error("Invalid file read format version.");
-        }
+        checkValueInEnum(header->fileReadFormatVersion,
+                         "Invalid file read format version.");
 
-        if(header->payloadMinFraction != 32){
-            throw std::runtime_error("Invalid payloadMinFraction.");
-        }
+        checkNumberValue(header->payloadMinFraction,
+                         s_payloadMinFraction,
+                         "Invalid payloadMinFraction.");
 
-        if(header->payloadMaxFraction != 64){
-            throw std::runtime_error("Invalid payloadMaxFraction.");
-        }
+        checkNumberValue(header->payloadMaxFraction,
+                         s_payloadMaxFraction,
+                         "Invalid payloadMaxFraction.");
 
-        if(header->payloadLeafFraction != 32){
-            throw std::runtime_error("Invalid payloadLeafFraction.");
-        }
+        checkNumberValue(header->payloadLeafFraction,
+                         s_payloadLeafFraction,
+                         "Invalid payload leaf fraction.");
 
-        if(header->schemaFormat < 1 || header->schemaFormat > 4){
-            throw std::runtime_error("Invalid schemaFormat.");
-        }
+        checkValueInEnum(header->schemaFormat,
+                         "Invalid schema format.");
     }
 }
 

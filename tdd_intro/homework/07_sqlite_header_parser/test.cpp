@@ -74,12 +74,12 @@ class MockGui : public IGui {
 void PrepareValidExpectedHeader(DbHeader &expected){
     std::memcpy(expected.dataHeader, s_dbDataHeader, sizeof(s_dbDataHeader));
     expected.pageSize = 1024;
-    expected.fileWriteFormatVersion = 2;
-    expected.fileReadFormatVersion = 2;
+    expected.fileWriteFormatVersion = ReadWriteFormat::WAL;
+    expected.fileReadFormatVersion = ReadWriteFormat::WAL;
     expected.payloadMaxFraction = 64;
     expected.payloadMinFraction = 32;
     expected.payloadLeafFraction = 32;
-    expected.schemaFormat = 1;
+    expected.schemaFormat = SchemaFormat::FormatOne;
 }
 
 void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
@@ -164,7 +164,7 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
 
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
-    expected.fileWriteFormatVersion = 3;
+    expected.fileWriteFormatVersion = ReadWriteFormat(3);
 
     ExpectHeaderRead(expected, reader);
 
@@ -177,7 +177,7 @@ TEST(DysplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
 
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
-    expected.fileReadFormatVersion = 3;
+    expected.fileReadFormatVersion = ReadWriteFormat(3);
 
     ExpectHeaderRead(expected, reader);
 
@@ -230,7 +230,7 @@ TEST(DysplayHeaderStructure, ChecksInvalidSchemaFormat) {
 
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
-    expected.schemaFormat = 0;
+    expected.schemaFormat = SchemaFormat::Undefined;
 
     ExpectHeaderRead(expected, reader);
 
