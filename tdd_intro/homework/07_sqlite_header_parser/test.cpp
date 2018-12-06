@@ -266,3 +266,17 @@ TEST(DisplayHeaderStructure, PrintsPageSize) {
 
     EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
 }
+
+TEST(DisplayHeaderStructure, PrintsFormatWriteVersion) {
+    MockDbReader reader;
+    MockGui gui;
+
+    DbHeader expected;
+    PrepareValidExpectedHeader(expected);
+
+    ExpectHeaderRead(reader, &expected);
+
+    EXPECT_CALL(gui, Write("Format write version: WAL"));
+
+    EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
+}
