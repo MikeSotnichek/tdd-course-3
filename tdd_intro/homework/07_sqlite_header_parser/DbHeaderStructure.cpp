@@ -81,4 +81,6 @@ void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     DbHeader* parsed = reinterpret_cast<DbHeader*>(rawData);
 
     checkValidHeader(parsed);
+
+    gui->Write("Page size: 1024");
 }

@@ -84,11 +84,10 @@ void PrepareValidExpectedHeader(DbHeader &expected){
     expected.encoding = Encoding::UTF8;
 }
 
-void ExpectHeaderRead(DbHeader &expected, MockDbReader& reader){
-    char readerData[sizeof(DbHeader)];
-    std::memcpy(readerData, &expected, sizeof(DbHeader));
+void ExpectHeaderRead(MockDbReader& reader, DbHeader* expected){
+    char* readerData = reinterpret_cast<char*>(expected);
 
-    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(readerData)), Return(sizeof(readerData))));
+    EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(DbHeader)), Return(sizeof(DbHeader))));
 }
 
 TEST(DisplayHeaderStructure, OpensDb) {
@@ -116,7 +115,7 @@ TEST(DisplayHeaderStructure, AcceptsValidHeaders) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
 }
@@ -129,7 +128,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidDataHeader) {
     PrepareValidExpectedHeader(expected);
     std::strcpy(expected.dataHeader, "Invalid header");
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -142,7 +141,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidPageSize) {
     PrepareValidExpectedHeader(expected);
     expected.pageSize = 100;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -155,7 +154,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidPageSize0) {
     PrepareValidExpectedHeader(expected);
     expected.pageSize = 0;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -168,7 +167,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidFileWriteFormatVersion) {
     PrepareValidExpectedHeader(expected);
     expected.fileWriteFormatVersion = ReadWriteFormat(3);
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -181,7 +180,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidFileReadFormatVersion) {
     PrepareValidExpectedHeader(expected);
     expected.fileReadFormatVersion = ReadWriteFormat(3);
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -194,7 +193,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidPayloadMinFraction) {
     PrepareValidExpectedHeader(expected);
     expected.payloadMinFraction = 0;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -207,7 +206,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidPayloadMaxFraction) {
     PrepareValidExpectedHeader(expected);
     expected.payloadMaxFraction = 0;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -220,7 +219,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidPayloadLeafFraction) {
     PrepareValidExpectedHeader(expected);
     expected.payloadLeafFraction = 0;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -233,7 +232,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidSchemaFormat) {
     PrepareValidExpectedHeader(expected);
     expected.schemaFormat = SchemaFormat::Undefined;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -246,7 +245,7 @@ TEST(DisplayHeaderStructure, ChecksInvalidEncoding) {
     PrepareValidExpectedHeader(expected);
     expected.encoding = Encoding::Undefined;
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     EXPECT_THROW(DisplayHeaderStructure(&gui, &reader), std::runtime_error);
 }
@@ -258,7 +257,7 @@ TEST(DisplayHeaderStructure, PrintsPageSize) {
     DbHeader expected;
     PrepareValidExpectedHeader(expected);
 
-    ExpectHeaderRead(expected, reader);
+    ExpectHeaderRead(reader, &expected);
 
     std::stringstream expectedMessage;
     expectedMessage << "Page size: ";
