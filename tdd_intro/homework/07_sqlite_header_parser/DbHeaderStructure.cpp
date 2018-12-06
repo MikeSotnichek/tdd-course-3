@@ -1,7 +1,7 @@
 #include "DbHeaderStructure.h"
 #include <stdexcept>
 #include <cassert>
-#include <iostream>
+#include <sstream>
 
 namespace
 {
@@ -82,5 +82,8 @@ void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
 
     checkValidHeader(parsed);
 
-    gui->Write("Page size: 1024");
+    std::stringstream message;
+    message << "Page size: ";
+    message << parsed->pageSize;
+    gui->Write(message.str());
 }
