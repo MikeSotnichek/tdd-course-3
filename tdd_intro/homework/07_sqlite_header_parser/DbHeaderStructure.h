@@ -6,7 +6,7 @@
 class IGui
 {
 public:
-    ~IGui(){}
+    virtual ~IGui(){}
     //Add here necessary methods
     virtual void Write(const std::string& message) = 0;
 };
@@ -14,7 +14,7 @@ public:
 class IDbReader
 {
 public:
-    ~IDbReader(){}
+    virtual ~IDbReader(){}
     //Add here necessary methods
     virtual void OpenDb() = 0;
     virtual std::size_t Read(std::size_t n, char* dest) = 0;

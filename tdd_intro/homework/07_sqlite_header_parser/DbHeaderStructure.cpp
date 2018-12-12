@@ -65,23 +65,8 @@ namespace
     }
 }
 
-void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
+void writeHeader(IGui* gui, DbHeader* parsed)
 {
-    if (dbReader == nullptr)
-    {
-        throw std::runtime_error("dbReader not initialized");
-    }
-    dbReader->OpenDb();
-    char rawData[s_dbHeaderSize];
-    const std::size_t readSize = dbReader->Read(s_dbHeaderSize, rawData);
-    if (readSize < sizeof(DbHeader))
-    {
-        throw std::runtime_error("Cannot parse data header from file.");
-    }
-    DbHeader* parsed = reinterpret_cast<DbHeader*>(rawData);
-
-    checkValidHeader(parsed);
-
     gui->Write("Page size: " + std::to_string(parsed->pageSize));
     gui->Write("Read/Write format: WAL / WAL");
     gui->Write("Reserved space: " + std::to_string(parsed->reservedSpace));
@@ -107,4 +92,24 @@ void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     gui->Write("Application id: " + std::to_string(parsed->applicationId));
     gui->Write("Version valid for: " + std::to_string(parsed->versionValidForNumber));
     gui->Write("Sqlite version number: " + std::to_string(parsed->sqliteVersionNumber));
+}
+
+void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
+{
+    if (dbReader == nullptr)
+    {
+        throw std::runtime_error("dbReader not initialized");
+    }
+    dbReader->OpenDb();
+    char rawData[s_dbHeaderSize];
+    const std::size_t readSize = dbReader->Read(s_dbHeaderSize, rawData);
+    if (readSize < sizeof(DbHeader))
+    {
+        throw std::runtime_error("Cannot parse data header from file.");
+    }
+    DbHeader* parsed = reinterpret_cast<DbHeader*>(rawData);
+
+    checkValidHeader(parsed);
+
+    writeHeader(gui, parsed);
 }
