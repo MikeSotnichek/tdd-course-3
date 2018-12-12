@@ -65,10 +65,55 @@ namespace
     }
 }
 
+const std::string getReadWriteFormat(const ReadWriteFormat& fmt)
+{
+    switch (fmt) {
+    case ReadWriteFormat::WAL:
+        return  "WAL";
+    case ReadWriteFormat::Legacy:
+        return  "Legacy";
+    default:
+        throw std::runtime_error("Undefined read write format.");
+    }
+}
+
+const std::string getEncoding(const Encoding& encoding)
+{
+    switch (encoding) {
+    case Encoding::UTF8:
+        return  "UTF8";
+    case Encoding::UTF16Be:
+        return  "UTF16Be";
+    case Encoding::UTF16Le:
+        return  "UTF16Le";
+    default:
+        throw std::runtime_error("Undefined encoding.");
+    }
+}
+
+const std::string getSchemaFormat(const SchemaFormat& fmt)
+{
+    switch (fmt) {
+    case SchemaFormat::FormatOne:
+        return  "1";
+    case SchemaFormat::FormatTwo:
+        return  "2";
+    case SchemaFormat::FormatThree:
+        return  "3";
+    case SchemaFormat::FormatFour:
+        return  "4";
+    default:
+        throw std::runtime_error("Undefined schema format.");
+    }
+}
+
 void writeHeader(IGui* gui, DbHeader* parsed)
 {
     gui->Write("Page size: " + std::to_string(parsed->pageSize));
-    gui->Write("Read/Write format: WAL / WAL");
+    gui->Write("Read/Write format: "
+               + getReadWriteFormat(parsed->fileReadFormatVersion)
+               + " / "
+               + getReadWriteFormat(parsed->fileWriteFormatVersion));
     gui->Write("Reserved space: " + std::to_string(parsed->reservedSpace));
     gui->Write("Payload Max/Min/Leaf fraction: "
                            + std::to_string(parsed->payloadMaxFraction)
@@ -79,13 +124,13 @@ void writeHeader(IGui* gui, DbHeader* parsed)
     gui->Write("Change counter: " + std::to_string(parsed->changeCounter));
     gui->Write("Pages count: " + std::to_string(parsed->sizePages));
     gui->Write("Freelist page trunk: " + std::to_string(parsed->freelistPageTrunkNumber));
-    gui->Write("Schema format: 1");
+    gui->Write("Schema format: " + getSchemaFormat(parsed->schemaFormat));
     gui->Write("Schema cookie: " + std::to_string(parsed->schemaCookie));
 
     gui->Write("Page cache size: " + std::to_string(parsed->pageCacheSize));
     gui->Write("bTree root page: " + std::to_string(parsed->bTreeRootPageNumber));
 
-    gui->Write("Encoding: UTF8");
+    gui->Write("Encoding: " + getEncoding(parsed->encoding));
 
     gui->Write("User version: " + std::to_string(parsed->userVersion));
     gui->Write("Vacuum mode: " + std::to_string(parsed->vacuumMode));
