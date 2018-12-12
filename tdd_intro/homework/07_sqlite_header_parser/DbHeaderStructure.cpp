@@ -81,4 +81,30 @@ void DisplayHeaderStructure(IGui* gui, IDbReader* dbReader)
     DbHeader* parsed = reinterpret_cast<DbHeader*>(rawData);
 
     checkValidHeader(parsed);
+
+    gui->Write("Page size: " + std::to_string(parsed->pageSize));
+    gui->Write("Read/Write format: WAL / WAL");
+    gui->Write("Reserved space: " + std::to_string(parsed->reservedSpace));
+    gui->Write("Payload Max/Min/Leaf fraction: "
+                           + std::to_string(parsed->payloadMaxFraction)
+                           + "/"
+                           + std::to_string(parsed->payloadMinFraction)
+                           + "/"
+                           + std::to_string(parsed->payloadLeafFraction));
+    gui->Write("Change counter: " + std::to_string(parsed->changeCounter));
+    gui->Write("Pages count: " + std::to_string(parsed->sizePages));
+    gui->Write("Freelist page trunk: " + std::to_string(parsed->freelistPageTrunkNumber));
+    gui->Write("Schema format: 1");
+    gui->Write("Schema cookie: " + std::to_string(parsed->schemaCookie));
+
+    gui->Write("Page cache size: " + std::to_string(parsed->pageCacheSize));
+    gui->Write("bTree root page: " + std::to_string(parsed->bTreeRootPageNumber));
+
+    gui->Write("Encoding: UTF8");
+
+    gui->Write("User version: " + std::to_string(parsed->userVersion));
+    gui->Write("Vacuum mode: " + std::to_string(parsed->vacuumMode));
+    gui->Write("Application id: " + std::to_string(parsed->applicationId));
+    gui->Write("Version valid for: " + std::to_string(parsed->versionValidForNumber));
+    gui->Write("Sqlite version number: " + std::to_string(parsed->sqliteVersionNumber));
 }
