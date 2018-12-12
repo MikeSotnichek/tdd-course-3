@@ -85,10 +85,40 @@ void PrepareValidExpectedHeader(DbHeader &expected){
 }
 
 
-void ExpectHeaderRead(MockDbReader& reader, DbHeader *expected){
+void ExpectHeaderRead(MockDbReader& reader, DbHeader *expected) {
     char* readerData = reinterpret_cast<char*>(expected);
 
     EXPECT_CALL(reader, Read(s_dbHeaderSize, _)).WillOnce(DoAll(SetArrayArgument<1>(readerData, readerData + sizeof(DbHeader)), Return(sizeof(DbHeader))));
+}
+
+void ExpectHeaderWrite(MockGui& gui,
+                       DbHeader& expected,
+                       const std::string& readWriteFormat = "WAL / WAL",
+                       const std::string& schemaFormat = "1",
+                       const std::string& encoding = "UTF8") {
+    InSequence sequence;
+    EXPECT_CALL(gui, Write("Page size: " + std::to_string(expected.pageSize)));
+    EXPECT_CALL(gui, Write("Read/Write format: " + readWriteFormat));
+    EXPECT_CALL(gui, Write("Reserved space: " + std::to_string(expected.reservedSpace)));
+    EXPECT_CALL(gui, Write("Payload Max/Min/Leaf fraction: "
+                           + std::to_string(expected.payloadMaxFraction)
+                           + "/"
+                           + std::to_string(expected.payloadMinFraction)
+                           + "/"
+                           + std::to_string(expected.payloadLeafFraction)));
+    EXPECT_CALL(gui, Write("Change counter: " + std::to_string(expected.changeCounter)));
+    EXPECT_CALL(gui, Write("Pages count: " + std::to_string(expected.sizePages)));
+    EXPECT_CALL(gui, Write("Freelist page trunk: " + std::to_string(expected.freelistPageTrunkNumber)));
+    EXPECT_CALL(gui, Write("Schema format: " + schemaFormat));
+    EXPECT_CALL(gui, Write("Schema cookie: " + std::to_string(expected.schemaCookie)));
+    EXPECT_CALL(gui, Write("Page cache size: " + std::to_string(expected.pageCacheSize)));
+    EXPECT_CALL(gui, Write("bTree root page: " + std::to_string(expected.bTreeRootPageNumber)));
+    EXPECT_CALL(gui, Write("Encoding: " + encoding));
+    EXPECT_CALL(gui, Write("User version: " + std::to_string(expected.userVersion)));
+    EXPECT_CALL(gui, Write("Vacuum mode: " + std::to_string(expected.vacuumMode)));
+    EXPECT_CALL(gui, Write("Application id: " + std::to_string(expected.applicationId)));
+    EXPECT_CALL(gui, Write("Version valid for: " + std::to_string(expected.versionValidForNumber)));
+    EXPECT_CALL(gui, Write("Sqlite version number: " + std::to_string(expected.sqliteVersionNumber)));
 }
 
 TEST(DisplayHeaderStructure, OpensDb) {
@@ -270,32 +300,8 @@ TEST(DisplayHeaderStructure, PrintsInfoAboutStructure) {
     PrepareValidExpectedHeader(expected);
 
     ExpectHeaderRead(reader, &expected);
-    InSequence sequence;
-    EXPECT_CALL(gui, Write("Page size: " + std::to_string(expected.pageSize)));
-    EXPECT_CALL(gui, Write("Read/Write format: WAL / WAL"));
-    EXPECT_CALL(gui, Write("Reserved space: " + std::to_string(expected.reservedSpace)));
-    EXPECT_CALL(gui, Write("Payload Max/Min/Leaf fraction: "
-                           + std::to_string(expected.payloadMaxFraction)
-                           + "/"
-                           + std::to_string(expected.payloadMinFraction)
-                           + "/"
-                           + std::to_string(expected.payloadLeafFraction)));
-    EXPECT_CALL(gui, Write("Change counter: " + std::to_string(expected.changeCounter)));
-    EXPECT_CALL(gui, Write("Pages count: " + std::to_string(expected.sizePages)));
-    EXPECT_CALL(gui, Write("Freelist page trunk: " + std::to_string(expected.freelistPageTrunkNumber)));
-    EXPECT_CALL(gui, Write("Schema format: 1"));
-    EXPECT_CALL(gui, Write("Schema cookie: " + std::to_string(expected.schemaCookie)));
 
-    EXPECT_CALL(gui, Write("Page cache size: " + std::to_string(expected.pageCacheSize)));
-    EXPECT_CALL(gui, Write("bTree root page: " + std::to_string(expected.bTreeRootPageNumber)));
-
-    EXPECT_CALL(gui, Write("Encoding: UTF8"));
-
-    EXPECT_CALL(gui, Write("User version: " + std::to_string(expected.userVersion)));
-    EXPECT_CALL(gui, Write("Vacuum mode: " + std::to_string(expected.vacuumMode)));
-    EXPECT_CALL(gui, Write("Application id: " + std::to_string(expected.applicationId)));
-    EXPECT_CALL(gui, Write("Version valid for: " + std::to_string(expected.versionValidForNumber)));
-    EXPECT_CALL(gui, Write("Sqlite version number: " + std::to_string(expected.sqliteVersionNumber)));
+    ExpectHeaderWrite(gui, expected);
 
     EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
 }
@@ -312,32 +318,8 @@ TEST(DisplayHeaderStructure, DsiplaysEnumsInInfo) {
     expected.fileReadFormatVersion = ReadWriteFormat::Legacy;
 
     ExpectHeaderRead(reader, &expected);
-    InSequence sequence;
-    EXPECT_CALL(gui, Write("Page size: " + std::to_string(expected.pageSize)));
-    EXPECT_CALL(gui, Write("Read/Write format: Legacy / Legacy"));
-    EXPECT_CALL(gui, Write("Reserved space: " + std::to_string(expected.reservedSpace)));
-    EXPECT_CALL(gui, Write("Payload Max/Min/Leaf fraction: "
-                           + std::to_string(expected.payloadMaxFraction)
-                           + "/"
-                           + std::to_string(expected.payloadMinFraction)
-                           + "/"
-                           + std::to_string(expected.payloadLeafFraction)));
-    EXPECT_CALL(gui, Write("Change counter: " + std::to_string(expected.changeCounter)));
-    EXPECT_CALL(gui, Write("Pages count: " + std::to_string(expected.sizePages)));
-    EXPECT_CALL(gui, Write("Freelist page trunk: " + std::to_string(expected.freelistPageTrunkNumber)));
-    EXPECT_CALL(gui, Write("Schema format: 4"));
-    EXPECT_CALL(gui, Write("Schema cookie: " + std::to_string(expected.schemaCookie)));
 
-    EXPECT_CALL(gui, Write("Page cache size: " + std::to_string(expected.pageCacheSize)));
-    EXPECT_CALL(gui, Write("bTree root page: " + std::to_string(expected.bTreeRootPageNumber)));
-
-    EXPECT_CALL(gui, Write("Encoding: UTF16Be"));
-
-    EXPECT_CALL(gui, Write("User version: " + std::to_string(expected.userVersion)));
-    EXPECT_CALL(gui, Write("Vacuum mode: " + std::to_string(expected.vacuumMode)));
-    EXPECT_CALL(gui, Write("Application id: " + std::to_string(expected.applicationId)));
-    EXPECT_CALL(gui, Write("Version valid for: " + std::to_string(expected.versionValidForNumber)));
-    EXPECT_CALL(gui, Write("Sqlite version number: " + std::to_string(expected.sqliteVersionNumber)));
+    ExpectHeaderWrite(gui, expected, "Legacy / Legacy", "4", "UTF16Be");
 
     EXPECT_NO_THROW(DisplayHeaderStructure(&gui, &reader));
 }
