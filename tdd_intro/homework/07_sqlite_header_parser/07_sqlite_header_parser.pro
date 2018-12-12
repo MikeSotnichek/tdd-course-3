@@ -7,6 +7,7 @@ CONFIG -= qt
 
 SOURCES += \
     test.cpp \
+    main.cpp \
     DbHeaderStructure.cpp
 
 HEADERS += \
